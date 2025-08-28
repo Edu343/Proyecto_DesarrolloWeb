@@ -8,5 +8,5 @@ Docente: Víctor Hugo Menéndez Domínguez
 
 | Manuel Eduardo Del Rio Camacho | Eduardo José Matos Uc | Jorge Gabriel Várguez Suárez |
 |-----------|-----------|-----------|
-|  ![](Artefactos/imagenes/Eduardo.jpg ) | Dato A2   | Dato A3   |
+| ![Texto alternativo]() | ![Texto alternativo]()   | ![Texto alternativo]()  |
 | Dato B1   | Dato B2   | Dato B3   |
