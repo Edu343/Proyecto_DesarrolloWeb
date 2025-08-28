@@ -8,5 +8,4 @@ Docente: Víctor Hugo Menéndez Domínguez
 
 | Manuel Eduardo Del Rio Camacho | Eduardo José Matos Uc | Jorge Gabriel Várguez Suárez |
 |-----------|-----------|-----------|
-| ![Texto alternativo]() | ![Texto alternativo]()   | ![Texto alternativo]()  |
-| Dato B1   | Dato B2   | Dato B3   |
+| ![](https://github.com/Edu343/Proyecto_DesarrolloWeb/blob/Artefactos/imagenes/Eduardo.jpg) | ![](https://github.com/Edu343/Proyecto_DesarrolloWeb/blob/Artefactos/imagenes/Jorge.jpeg)   | ![](https://github.com/Edu343/Proyecto_DesarrolloWeb/blob/Artefactos/imagenes/Matos.jpg)  |
