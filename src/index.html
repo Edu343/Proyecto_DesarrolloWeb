@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferretería El Constructor</title>
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/inicio.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navegacion-principal">
+        <div class="contenedor-nav">
+            <div class="logo">
+                <i class="fas fa-tools"></i>
+                <span>Ferretería El Constructor</span>
+            </div>
+            <ul class="menu-nav" id="menu-nav">
+                <li><a href="index.html" class="activo">Inicio</a></li>
+                <li><a href="productos.html">Productos</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+            <div class="carrito-nav">
+                <a href="carrito.html">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="contador-carrito">0</span>
+                </a>
+            </div>
+            <div class="menu-hamburguesa" id="menu-hamburguesa">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="contenido-hero">
+            <h1>Herramientas y Materiales de Calidad</h1>
+            <p>Tu aliado en construcción y proyectos desde 1994.</p>
+            <div class="botones-hero">
+                <a href="productos.html" class="btn btn-primario">Ver Catálogo</a>
+                <a href="#productos" class="btn btn-secundario">Productos Destacados</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="categorias-destacadas">
+        <div class="contenedor">
+            <h2>Explora por Categoría</h2>
+            <div class="grid-categorias">
+                <div class="categoria-card" data-categoria="herramientas">
+                    <i class="fas fa-hammer"></i>
+                    <h3>Herramientas</h3>
+                </div>
+                <div class="categoria-card" data-categoria="pinturas">
+                    <i class="fas fa-paint-roller"></i>
+                    <h3>Pinturas</h3>
+                </div>
+                <div class="categoria-card" data-categoria="plomeria">
+                    <i class="fas fa-faucet"></i>
+                    <h3>Plomería</h3>
+                </div>
+                <div class="categoria-card" data-categoria="electricidad">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Electricidad</h3>
+                </div>
+                <div class="categoria-card" data-categoria="construccion">
+                    <i class="fas fa-hard-hat"></i>
+                    <h3>Construcción</h3>
+                </div>
+                <div class="categoria-card" data-categoria="jardineria">
+                    <i class="fas fa-seedling"></i>
+                    <h3>Jardinería</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="productos-destacados" id="productos">
+        <div class="contenedor">
+            <h2>Productos Destacados</h2>
+            <div class="productos-grid" id="productos-destacados">
+            </div>
+            <div class="text-center mt-4">
+                <a href="productos.html" class="btn btn-outline">Ver Catálogo Completo</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="contenedor">
+            <div class="grid-footer">
+                <div class="columna-footer">
+                    <h3>Contacto</h3>
+                    <p><i class="fas fa-phone"></i> (999) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> ventas@ferreteria.com</p>
+                </div>
+                <div class="columna-footer">
+                    <h3>Ubicación</h3>
+                    <p>Calle 50 #123, Centro</p>
+                </div>
+                <div class="columna-footer">
+                    <h3>Horario</h3>
+                    <p>Lun-Sáb: 8:00 AM - 7:00 PM</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 Ferretería El Constructor. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/principal.js"></script>
+    <script src="js/inicio.js"></script>
+</body>
+</html>
