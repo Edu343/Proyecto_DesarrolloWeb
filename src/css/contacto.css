@@ -1,0 +1,65 @@
+/* Información de Contacto Simplificada */
+.contacto-principal {
+    padding: 40px 0;
+    background: var(--color-fondo);
+}
+
+.grid-formulario-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.formulario-contacto,
+.info-contacto-simple {
+    background: var(--color-blanco);
+    padding: 25px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.formulario-contacto h2,
+.info-contacto-simple h2 {
+    font-size: 1.5rem;
+    color: var(--color-secundario);
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.info-contacto-simple .contacto-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.info-contacto-simple .contacto-item i {
+    font-size: 1.5rem;
+    color: var(--color-primario);
+}
+
+.info-contacto-simple .contacto-item h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.info-contacto-simple .contacto-item p {
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* Formulario */
+.formulario-contacto .btn-primario {
+    width: 100%;
+    margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .grid-formulario-info {
+        grid-template-columns: 1fr;
+    }
+}
