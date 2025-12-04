@@ -1,12 +1,8 @@
 /**
- * Carrito.js - Versión Definitiva con Drag & Drop
- * Cumple requisitos: localStorage + Drag & Drop (funcionalidad extra)
+ * Carrito de Compras - Versión Simplificada con Drag & Drop
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // ============================================
-    // REFERENCIAS DOM
-    // ============================================
     const itemsCarritoBody = document.getElementById('items-carrito');
     const carritoVacioDiv = document.getElementById('carrito-vacio');
     const carritoContenidoDiv = document.getElementById('carrito-contenido');
@@ -19,37 +15,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const IVA_RATE = 0.16;
     let draggedElement = null;
 
-    // ============================================
-    // FUNCIONES DE CARRITO
-    // ============================================
-
     /**
-     * Obtener carrito desde localStorage
+     * Obtener carrito
      */
     function obtenerCarrito() {
-        try {
-            const carrito = localStorage.getItem('carrito');
-            return carrito ? JSON.parse(carrito) : [];
-        } catch (error) {
-            console.error('Error al leer carrito:', error);
-            return [];
-        }
+        return JSON.parse(localStorage.getItem('carrito')) || [];
     }
 
     /**
-     * Guardar carrito en localStorage
+     * Guardar carrito
      */
     function guardarCarrito(carrito) {
-        try {
-            localStorage.setItem('carrito', JSON.stringify(carrito));
-            actualizarContador();
-        } catch (error) {
-            console.error('Error al guardar carrito:', error);
-        }
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        actualizarContador();
     }
 
     /**
-     * Renderizar carrito completo
+     * Renderizar carrito
      */
     function renderCarrito() {
         const carrito = obtenerCarrito();
@@ -58,84 +40,77 @@ document.addEventListener('DOMContentLoaded', () => {
         if (carrito.length === 0) {
             carritoVacioDiv.style.display = 'block';
             carritoContenidoDiv.style.display = 'none';
-            return;
+        } else {
+            carritoVacioDiv.style.display = 'none';
+            carritoContenidoDiv.style.display = 'block';
+
+            carrito.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.dataset.id = item.id;
+                tr.dataset.index = index;
+                tr.draggable = true;
+                tr.classList.add('carrito-item');
+
+                tr.innerHTML = `
+                    <td data-label="Producto">
+                        <div class="item-carrito">
+                            <span class="drag-handle" title="Arrastra para reordenar">
+                                <i class="fas fa-grip-vertical"></i>
+                            </span>
+                            <div class="item-imagen">
+                                <i class="fas fa-box-open"></i>
+                            </div>
+                            <div class="item-detalles">
+                                <span class="item-nombre">${item.nombre}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td data-label="Precio" class="item-precio">$${item.precio.toFixed(2)}</td>
+                    <td data-label="Cantidad">
+                        <div class="control-cantidad">
+                            <button class="btn-cantidad" data-accion="disminuir" data-id="${item.id}">-</button>
+                            <input type="number" value="${item.cantidad}" min="1" max="${item.stock}"
+                                   class="input-cantidad" data-id="${item.id}">
+                            <button class="btn-cantidad" data-accion="aumentar" data-id="${item.id}">+</button>
+                        </div>
+                    </td>
+                    <td data-label="Subtotal" class="item-subtotal">$${(item.precio * item.cantidad).toFixed(2)}</td>
+                    <td>
+                        <button class="btn-eliminar" data-id="${item.id}" title="Eliminar">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </td>
+                `;
+
+                itemsCarritoBody.appendChild(tr);
+            });
+
+            attachDragAndDrop();
         }
 
-        carritoVacioDiv.style.display = 'none';
-        carritoContenidoDiv.style.display = 'block';
-
-        carrito.forEach((item, index) => {
-            const tr = document.createElement('tr');
-            tr.dataset.id = item.id;
-            tr.dataset.index = index;
-            tr.draggable = true;
-            tr.classList.add('carrito-item');
-
-            tr.innerHTML = `
-                <td data-label="Producto">
-                    <div class="item-carrito">
-                        <span class="drag-handle" title="Arrastra para reordenar">
-                            <i class="fas fa-grip-vertical"></i>
-                        </span>
-                        <div class="item-imagen">
-                            <i class="fas fa-box-open"></i>
-                        </div>
-                        <div class="item-detalles">
-                            <span class="item-nombre">${item.nombre}</span>
-                        </div>
-                    </div>
-                </td>
-                <td data-label="Precio" class="item-precio">$${item.precio.toFixed(2)}</td>
-                <td data-label="Cantidad">
-                    <div class="control-cantidad">
-                        <button class="btn-cantidad" data-accion="disminuir" data-id="${item.id}">-</button>
-                        <input type="number" value="${item.cantidad}" min="1" max="${item.stock}"
-                               class="input-cantidad" data-id="${item.id}">
-                        <button class="btn-cantidad" data-accion="aumentar" data-id="${item.id}">+</button>
-                    </div>
-                </td>
-                <td data-label="Subtotal" class="item-subtotal">$${(item.precio * item.cantidad).toFixed(2)}</td>
-                <td>
-                    <button class="btn-eliminar" data-id="${item.id}" title="Eliminar">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </td>
-            `;
-
-            itemsCarritoBody.appendChild(tr);
-        });
-
-        attachDragAndDrop();
         actualizarTotales();
         attachEventos();
     }
 
-    // ============================================
-    // DRAG & DROP (FUNCIONALIDAD EXTRA)
-    // ============================================
-
     /**
-     * Adjuntar eventos de Drag & Drop HTML5
+     * Drag & Drop
      */
     function attachDragAndDrop() {
         const items = itemsCarritoBody.querySelectorAll('tr[draggable="true"]');
 
         items.forEach(item => {
-            // Inicio del arrastre
             item.addEventListener('dragstart', (e) => {
                 draggedElement = item;
                 item.classList.add('dragging');
                 e.dataTransfer.effectAllowed = 'move';
             });
 
-            // Fin del arrastre
             item.addEventListener('dragend', () => {
                 item.classList.remove('dragging');
                 draggedElement = null;
                 items.forEach(i => i.classList.remove('drag-over'));
             });
 
-            // Sobre un elemento
             item.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 if (draggedElement !== item) {
@@ -143,12 +118,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Salir del elemento
             item.addEventListener('dragleave', () => {
                 item.classList.remove('drag-over');
             });
 
-            // Soltar elemento
             item.addEventListener('drop', (e) => {
                 e.preventDefault();
                 if (draggedElement && draggedElement !== item) {
@@ -170,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Actualizar orden del carrito después del Drag & Drop
+     * Actualizar orden del carrito
      */
     function actualizarOrden() {
         const items = itemsCarritoBody.querySelectorAll('tr');
@@ -187,12 +160,8 @@ document.addEventListener('DOMContentLoaded', () => {
         mostrarToast('Orden actualizado', 'exito');
     }
 
-    // ============================================
-    // MANEJO DE EVENTOS
-    // ============================================
-
     /**
-     * Adjuntar eventos a controles del carrito
+     * Adjuntar eventos
      */
     function attachEventos() {
         // Botones eliminar
@@ -203,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Botones de cantidad
+        // Controles de cantidad
         document.querySelectorAll('.btn-cantidad').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const id = parseInt(e.currentTarget.dataset.id);
@@ -212,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Input directo de cantidad
+        // Input directo
         document.querySelectorAll('.input-cantidad').forEach(input => {
             input.addEventListener('change', (e) => {
                 const id = parseInt(e.currentTarget.dataset.id);
@@ -223,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Cambiar cantidad con botones + y -
+     * Cambiar cantidad
      */
     function cambiarCantidad(id, accion) {
         let carrito = obtenerCarrito();
@@ -249,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Actualizar cantidad con input directo
+     * Actualizar cantidad directa
      */
     function actualizarCantidad(id, cantidad) {
         let carrito = obtenerCarrito();
@@ -269,22 +238,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Eliminar producto del carrito
+     * Eliminar item
      */
     function eliminarItem(id) {
         let carrito = obtenerCarrito();
-        const item = carrito.find(i => i.id === id);
-
-        if (item && confirm(`¿Eliminar "${item.nombre}" del carrito?`)) {
-            carrito = carrito.filter(i => i.id !== id);
-            guardarCarrito(carrito);
-            renderCarrito();
-            mostrarToast('Producto eliminado', 'exito');
-        }
+        carrito = carrito.filter(i => i.id !== id);
+        guardarCarrito(carrito);
+        renderCarrito();
+        mostrarToast('Producto eliminado', 'exito');
     }
 
     /**
-     * Vaciar todo el carrito
+     * Vaciar carrito
      */
     function vaciarCarrito() {
         if (confirm('¿Estás seguro de vaciar el carrito?')) {
@@ -294,12 +259,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ============================================
-    // CÁLCULOS
-    // ============================================
-
     /**
-     * Actualizar totales (subtotal, IVA, envío, total)
+     * Actualizar totales
      */
     function actualizarTotales() {
         const carrito = obtenerCarrito();
@@ -314,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Actualizar contador del carrito en navegación
+     * Actualizar contador
      */
     function actualizarContador() {
         const carrito = obtenerCarrito();
@@ -322,31 +283,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const contador = document.querySelector('.contador-carrito');
         if (contador) {
             contador.textContent = total;
-            if (total > 0) {
-                contador.classList.add('tiene-items');
-            } else {
-                contador.classList.remove('tiene-items');
-            }
         }
     }
 
-    // ============================================
-    // UI/UX
-    // ============================================
-
     /**
-     * Mostrar notificación toast
+     * Mostrar toast
      */
     function mostrarToast(mensaje, tipo = 'exito') {
         const toastExistente = document.querySelector('.toast');
         if (toastExistente) toastExistente.remove();
 
         const toast = document.createElement('div');
-        toast.className = `toast toast-${tipo}`;
-        toast.innerHTML = `
-            <i class="fas fa-${tipo === 'exito' ? 'check-circle' : 'exclamation-circle'}"></i>
-            <span>${mensaje}</span>
-        `;
+        toast.className = `toast ${tipo}`;
+        toast.textContent = mensaje;
         document.body.appendChild(toast);
 
         setTimeout(() => toast.classList.add('show'), 10);
@@ -356,25 +305,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3000);
     }
 
-    // ============================================
-    // EVENT LISTENERS PRINCIPALES
-    // ============================================
+    // Event Listeners principales
+    vaciarCarritoBtn.addEventListener('click', vaciarCarrito);
+    tipoEnvioSelect.addEventListener('change', actualizarTotales);
 
-    // Vaciar carrito
-    if (vaciarCarritoBtn) {
-        vaciarCarritoBtn.addEventListener('click', vaciarCarrito);
-    }
-
-    // Cambio en tipo de envío
-    if (tipoEnvioSelect) {
-        tipoEnvioSelect.addEventListener('change', actualizarTotales);
-    }
-
-    // ============================================
-    // INICIALIZACIÓN
-    // ============================================
-
-    console.log('Inicializando carrito de compras...');
+    // Inicializar
     renderCarrito();
-    console.log('Carrito inicializado correctamente');
 });

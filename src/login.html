@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Ferretería El Constructor</title>
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navegacion-principal">
+        <div class="contenedor-nav">
+            <div class="logo">
+                <i class="fas fa-tools"></i>
+                <span>Ferretería El Constructor</span>
+            </div>
+            <ul class="menu-nav" id="menu-nav">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="productos.html">Productos</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+            <div class="carrito-nav">
+                <a href="carrito.html">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="contador-carrito">0</span>
+                </a>
+            </div>
+            <div class="menu-hamburguesa" id="menu-hamburguesa">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-login">
+        <div class="login-box">
+            <h2>Iniciar Sesión</h2>
+
+            <form id="form-login" class="form-auth">
+                <div class="grupo-form">
+                    <label for="login-email">
+                        <i class="fas fa-envelope"></i> Email
+                    </label>
+                    <input type="email" id="login-email" name="email" required autocomplete="email">
+                    <span class="error-mensaje" id="error-login-email"></span>
+                </div>
+
+                <div class="grupo-form">
+                    <label for="login-password">
+                        <i class="fas fa-lock"></i> Contraseña
+                    </label>
+                    <div class="password-input">
+                        <input type="password" id="login-password" name="password" required autocomplete="current-password">
+                        <button type="button" class="toggle-password" data-target="login-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <span class="error-mensaje" id="error-login-password"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primario btn-block">
+                    <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                </button>
+            </form>
+
+            <div class="divider">O</div>
+
+            <p class="toggle-form-text">
+                ¿No tienes cuenta? <a href="#" id="mostrar-registro">Regístrate aquí</a>
+            </p>
+        </div>
+
+        <div class="login-box" id="registro-box" style="display: none;">
+            <h2>Crear Cuenta</h2>
+
+            <form id="form-registro" class="form-auth">
+                <div class="grupo-form">
+                    <label for="registro-nombre">
+                        <i class="fas fa-user"></i> Nombre Completo
+                    </label>
+                    <input type="text" id="registro-nombre" name="nombre" required>
+                    <span class="error-mensaje" id="error-registro-nombre"></span>
+                </div>
+
+                <div class="grupo-form">
+                    <label for="registro-email">
+                        <i class="fas fa-envelope"></i> Email
+                    </label>
+                    <input type="email" id="registro-email" name="email" required>
+                    <span class="error-mensaje" id="error-registro-email"></span>
+                </div>
+
+                <div class="grupo-form">
+                    <label for="registro-telefono">
+                        <i class="fas fa-phone"></i> Teléfono (10 dígitos)
+                    </label>
+                    <input type="tel" id="registro-telefono" name="telefono" maxlength="10">
+                    <span class="error-mensaje" id="error-registro-telefono"></span>
+                </div>
+
+                <div class="grupo-form">
+                    <label for="registro-password">
+                        <i class="fas fa-lock"></i> Contraseña
+                    </label>
+                    <div class="password-input">
+                        <input type="password" id="registro-password" name="password" required>
+                        <button type="button" class="toggle-password" data-target="registro-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <small>Mínimo 8 caracteres, una mayúscula, una minúscula y un número</small>
+                    <span class="error-mensaje" id="error-registro-password"></span>
+                </div>
+
+                <div class="grupo-form">
+                    <label for="registro-password-confirm">
+                        <i class="fas fa-lock"></i> Confirmar Contraseña
+                    </label>
+                    <input type="password" id="registro-password-confirm" name="password_confirm" required>
+                    <span class="error-mensaje" id="error-registro-password-confirm"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primario btn-block">
+                    <i class="fas fa-user-plus"></i> Registrarse
+                </button>
+            </form>
+
+            <div class="divider">O</div>
+
+            <p class="toggle-form-text">
+                ¿Ya tienes cuenta? <a href="#" id="mostrar-login">Inicia sesión aquí</a>
+            </p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="contenedor">
+            <div class="grid-footer">
+                <div class="columna-footer">
+                    <h3>Contacto</h3>
+                    <p><i class="fas fa-phone"></i> (999) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> ventas@ferreteria.com</p>
+                </div>
+                <div class="columna-footer">
+                    <h3>Ubicación</h3>
+                    <p>Calle 50 #123, Centro</p>
+                </div>
+                <div class="columna-footer">
+                    <h3>Horario</h3>
+                    <p>Lun-Sáb: 8:00 AM - 7:00 PM</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 Ferretería El Constructor. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/principal.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>
