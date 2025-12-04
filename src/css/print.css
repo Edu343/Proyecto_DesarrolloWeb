@@ -1,0 +1,299 @@
+/**
+ * Estilos de Impresión (Media Query Print)
+ * Optimizado para imprimir páginas de productos, carrito y pedidos
+ */
+
+@media print {
+    /* Ocultar elementos innecesarios */
+    nav, .navegacion-principal, .menu-hamburguesa,
+    footer, .footer,
+    .btn, button,
+    .carrito-nav,
+    .sidebar-filtros,
+    .barra-ordenamiento,
+    .paginacion,
+    .modal-producto,
+    .toast,
+    .acciones-carrito,
+    input[type="button"], input[type="submit"],
+    .producto-acciones,
+    .btn-ver-detalles,
+    .btn-agregar-carrito,
+    .btn-eliminar,
+    .control-cantidad button,
+    .hero,
+    .categorias-destacadas,
+    #api-widgets {
+        display: none !important;
+    }
+
+    /* Resetear colores de fondo */
+    * {
+        background: white !important;
+        color: black !important;
+    }
+
+    /* Configuración de página */
+    @page {
+        margin: 2cm;
+        size: letter portrait;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-size: 12pt;
+        line-height: 1.4;
+    }
+
+    /* Encabezado de impresión */
+    .header-pagina {
+        background: white !important;
+        color: black !important;
+        border-bottom: 3px solid #333;
+        padding: 10px 0;
+        margin-bottom: 20px;
+    }
+
+    .header-pagina h1 {
+        font-size: 24pt;
+        margin: 0;
+    }
+
+    /* Logo para impresión */
+    .logo {
+        font-size: 18pt;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    /* ========================================
+       PRODUCTOS
+       ======================================== */
+
+    .productos-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 15px;
+        page-break-inside: avoid;
+    }
+
+    .producto-card {
+        border: 2px solid #333;
+        padding: 10px;
+        page-break-inside: avoid;
+        margin-bottom: 10px;
+    }
+
+    .producto-nombre {
+        font-size: 14pt;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .producto-precio {
+        font-size: 16pt;
+        font-weight: bold;
+        margin: 8px 0;
+    }
+
+    .producto-categoria,
+    .producto-stock {
+        font-size: 10pt;
+        margin: 3px 0;
+    }
+
+    .producto-descripcion {
+        font-size: 10pt;
+        margin: 5px 0;
+    }
+
+    /* ========================================
+       CARRITO DE COMPRAS
+       ======================================== */
+
+    .contenedor-carrito {
+        display: block !important;
+    }
+
+    .tabla-productos {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    .tabla-productos th,
+    .tabla-productos td {
+        border: 1px solid #333;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .tabla-productos thead {
+        background: #f0f0f0 !important;
+    }
+
+    .tabla-productos th {
+        font-weight: bold;
+        font-size: 11pt;
+    }
+
+    .tabla-productos td {
+        font-size: 10pt;
+    }
+
+    .item-precio,
+    .item-subtotal {
+        font-weight: bold;
+        font-size: 12pt;
+    }
+
+    /* Resumen del pedido */
+    .resumen-pedido {
+        border: 2px solid #333;
+        padding: 15px;
+        margin-top: 20px;
+        page-break-inside: avoid;
+    }
+
+    .resumen-contenido h3 {
+        font-size: 16pt;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #333;
+        padding-bottom: 5px;
+    }
+
+    .resumen-linea {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 0;
+        font-size: 11pt;
+    }
+
+    .resumen-total {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-top: 2px solid #333;
+        font-size: 14pt;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    /* ========================================
+       INFORMACIÓN ADICIONAL
+       ======================================== */
+
+    /* Agregar información de contacto al final */
+    .footer::after {
+        content: "Ferretería El Constructor | Tel: (999) 123-4567 | Email: ventas@ferreteria.com";
+        display: block;
+        text-align: center;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 2px solid #333;
+        font-size: 10pt;
+    }
+
+    /* Fecha de impresión */
+    .header-pagina::after {
+        content: "Impreso el: " attr(data-date);
+        display: block;
+        font-size: 9pt;
+        margin-top: 5px;
+        color: #666 !important;
+    }
+
+    /* ========================================
+       UTILIDADES DE IMPRESIÓN
+       ======================================== */
+
+    /* Evitar quiebres de página */
+    .no-break {
+        page-break-inside: avoid;
+    }
+
+    /* Forzar quiebre de página */
+    .page-break {
+        page-break-before: always;
+    }
+
+    /* Enlaces */
+    a {
+        text-decoration: none;
+    }
+
+    a[href]::after {
+        content: " (" attr(href) ")";
+        font-size: 9pt;
+    }
+
+    /* Ocultar URLs de imágenes */
+    img[src]::after {
+        content: "";
+    }
+
+    /* Imágenes */
+    img {
+        max-width: 100% !important;
+        height: auto !important;
+        page-break-inside: avoid;
+    }
+
+    /* ========================================
+       FORMULARIOS (para facturas/pedidos)
+       ======================================== */
+
+    .form-contacto,
+    .form-pedido {
+        border: 1px solid #333;
+        padding: 15px;
+        margin: 20px 0;
+    }
+
+    .form-contacto input,
+    .form-pedido input {
+        border-bottom: 1px solid #333 !important;
+        border-top: none !important;
+        border-left: none !important;
+        border-right: none !important;
+    }
+
+    /* ========================================
+       QR CODE (si se implementa)
+       ======================================== */
+
+    .qr-code {
+        page-break-inside: avoid;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    /* ========================================
+       CABECERA Y PIE DE PÁGINA
+       ======================================== */
+
+    @page {
+        @top-center {
+            content: "Ferretería El Constructor - Catálogo";
+        }
+
+        @bottom-right {
+            content: "Página " counter(page) " de " counter(pages);
+        }
+    }
+}
+
+/* ========================================
+   LANDSCAPE (para tablas anchas)
+   ======================================== */
+
+@media print and (orientation: landscape) {
+    @page {
+        size: letter landscape;
+    }
+
+    .productos-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}

@@ -54,6 +54,51 @@
     font-size: 0.9rem;
 }
 
+.drag-handle {
+    cursor: grab;
+    color: #999;
+    padding: 5px;
+    transition: color 0.2s;
+}
+
+.drag-handle:hover {
+    color: var(--color-primario);
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+tr[draggable="true"] {
+    transition: all 0.3s ease;
+}
+
+tr.dragging {
+    opacity: 0.5;
+    background: #f0f0f0;
+}
+
+tr.drag-over {
+    border-top: 3px solid var(--color-primario);
+}
+
+tr.eliminando {
+    animation: fadeOut 0.3s ease-out;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+}
+
+.item-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 .item-imagen {
     width: 60px;
     height: 60px;
