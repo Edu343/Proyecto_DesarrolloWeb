@@ -21,11 +21,19 @@
                 <li><a href="servicios.html" class="activo">Servicios</a></li>
                 <li><a href="contacto.html">Contacto</a></li>
             </ul>
-            <div class="carrito-nav">
-                <a href="carrito.html">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="contador-carrito">0</span>
-                </a>
+            <div class="nav-derecha">
+                <div id="user-menu" class="user-menu" style="display: none;">
+                    <span class="user-nombre" id="nav-user-nombre"></span>
+                    <button class="btn-logout" id="btn-logout" title="Cerrar sesión">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+                <div class="carrito-nav">
+                    <a href="carrito.html">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="contador-carrito">0</span>
+                    </a>
+                </div>
             </div>
             <div class="menu-hamburguesa" id="menu-hamburguesa">
                 <span></span>
@@ -48,7 +56,12 @@
                         <i class="fas fa-truck"></i>
                     </div>
                     <h3>Envío a Domicilio</h3>
-                    <p>Llevamos tus productos hasta tu puerta. Entregas rápidas y seguras.</p>
+                    <p>Llevamos tus productos hasta tu puerta. Entregas rápidas y seguras en toda la ciudad.</p>
+                    <ul class="servicio-detalles">
+                        <li><i class="fas fa-check"></i> Entregas el mismo día</li>
+                        <li><i class="fas fa-check"></i> Sin costo en compras mayores a $500</li>
+                        <li><i class="fas fa-check"></i> Rastreo en tiempo real</li>
+                    </ul>
                 </div>
 
                 <div class="servicio-card">
@@ -56,7 +69,12 @@
                         <i class="fas fa-cut"></i>
                     </div>
                     <h3>Corte a Medida</h3>
-                    <p>Cortamos madera, metal y otros materiales según tus especificaciones.</p>
+                    <p>Cortamos madera, metal y otros materiales según tus especificaciones exactas.</p>
+                    <ul class="servicio-detalles">
+                        <li><i class="fas fa-check"></i> Cortes precisos y profesionales</li>
+                        <li><i class="fas fa-check"></i> Madera, metal, vidrio y más</li>
+                        <li><i class="fas fa-check"></i> Servicio inmediato</li>
+                    </ul>
                 </div>
 
                 <div class="servicio-card">
@@ -65,7 +83,81 @@
                     </div>
                     <h3>Asesoría Técnica</h3>
                     <p>Expertos te ayudan a elegir los materiales y herramientas adecuados para tu proyecto.</p>
+                    <ul class="servicio-detalles">
+                        <li><i class="fas fa-check"></i> Especialistas capacitados</li>
+                        <li><i class="fas fa-check"></i> Asesoría sin costo</li>
+                        <li><i class="fas fa-check"></i> Cotizaciones personalizadas</li>
+                    </ul>
                 </div>
+
+                <div class="servicio-card">
+                    <div class="servicio-icono">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3>Mezcla de Pinturas</h3>
+                    <p>Creamos el color exacto que necesitas con nuestra máquina de mezcla computarizada.</p>
+                    <ul class="servicio-detalles">
+                        <li><i class="fas fa-check"></i> Más de 10,000 colores</li>
+                        <li><i class="fas fa-check"></i> Igualación de colores</li>
+                        <li><i class="fas fa-check"></i> Muestras gratuitas</li>
+                    </ul>
+                </div>
+
+                <div class="servicio-card">
+                    <div class="servicio-icono">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3>Renta de Herramientas</h3>
+                    <p>Renta equipo profesional por día o por semana para tus proyectos.</p>
+                    <ul class="servicio-detalles">
+                        <li><i class="fas fa-check"></i> Taladros, sierras y más</li>
+                        <li><i class="fas fa-check"></i> Precios accesibles</li>
+                        <li><i class="fas fa-check"></i> Mantenimiento incluido</li>
+                    </ul>
+                </div>
+
+                <div class="servicio-card">
+                    <div class="servicio-icono">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h3>Proyectos por Encargo</h3>
+                    <p>Te ayudamos a planificar y cotizar todo tu proyecto de construcción o remodelación.</p>
+                    <ul class="servicio-detalles">
+                        <li><i class="fas fa-check"></i> Cálculo de materiales</li>
+                        <li><i class="fas fa-check"></i> Lista completa de compra</li>
+                        <li><i class="fas fa-check"></i> Presupuestos detallados</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="info-adicional">
+        <div class="contenedor">
+            <div class="grid-info">
+                <div class="info-card">
+                    <h3><i class="fas fa-history"></i> Nuestra Historia</h3>
+                    <p>Desde 1994, Ferretería El Constructor ha sido el aliado de confianza para constructores, contratistas y familias en sus proyectos. Con más de 30 años de experiencia, ofrecemos calidad garantizada y el mejor servicio al cliente.</p>
+                </div>
+                <div class="info-card">
+                    <h3><i class="fas fa-award"></i> Garantía de Calidad</h3>
+                    <p>Todos nuestros productos cuentan con garantía del fabricante. Trabajamos únicamente con marcas reconocidas y confiables. Si no quedas satisfecho, te devolvemos tu dinero.</p>
+                </div>
+                <div class="info-card">
+                    <h3><i class="fas fa-handshake"></i> Atención Personalizada</h3>
+                    <p>Nuestro equipo de expertos está capacitado para brindarte la mejor asesoría. Ya sea un proyecto pequeño o una obra completa, estamos aquí para ayudarte en cada paso.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="llamado-accion">
+        <div class="contenedor">
+            <h2>¿Listo para comenzar tu proyecto?</h2>
+            <p>Visítanos en nuestra tienda o contáctanos para una cotización personalizada</p>
+            <div class="botones-cta">
+                <a href="productos.html" class="btn btn-primario">Ver Productos</a>
+                <a href="contacto.html" class="btn btn-secundario">Contáctanos</a>
             </div>
         </div>
     </section>
