@@ -21,11 +21,19 @@
                 <li><a href="servicios.html">Servicios</a></li>
                 <li><a href="contacto.html">Contacto</a></li>
             </ul>
-            <div class="carrito-nav">
-                <a href="carrito.html">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="contador-carrito">0</span>
-                </a>
+            <div class="nav-derecha">
+                <div id="user-menu" class="user-menu" style="display: none;">
+                    <span class="user-nombre" id="nav-user-nombre"></span>
+                    <button class="btn-logout" id="btn-logout" title="Cerrar sesión">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+                <div class="carrito-nav">
+                    <a href="carrito.html">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="contador-carrito">0</span>
+                    </a>
+                </div>
             </div>
             <div class="menu-hamburguesa" id="menu-hamburguesa">
                 <span></span>
@@ -135,7 +143,6 @@
         </div>
     </footer>
 
-    <script src="js/principal.js"></script>
     <script src="js/productos.js"></script>
 </body>
 </html>

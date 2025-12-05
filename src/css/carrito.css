@@ -1,0 +1,391 @@
+.contenedor-carrito {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
+}
+
+.carrito-principal {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 20px;
+}
+
+.carrito-vacio {
+    text-align: center;
+    padding: 40px 10px;
+}
+
+.carrito-vacio i {
+    font-size: 4rem;
+    color: #ccc;
+    margin-bottom: 15px;
+}
+
+.carrito-vacio h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.tabla-productos {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-productos th, .tabla-productos td {
+    padding: 10px;
+    text-align: left;
+}
+
+.tabla-productos thead {
+    border-bottom: 2px solid var(--color-primario);
+}
+
+.tabla-productos tbody tr {
+    border-bottom: 1px solid #eee;
+}
+
+.item-carrito {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+}
+
+.drag-handle {
+    cursor: grab;
+    color: #999;
+    padding: 5px;
+    transition: color 0.2s;
+}
+
+.drag-handle:hover {
+    color: var(--color-primario);
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+tr[draggable="true"] {
+    transition: all 0.3s ease;
+}
+
+tr.dragging {
+    opacity: 0.5;
+    background: #f0f0f0;
+}
+
+tr.drag-over {
+    border-top: 3px solid var(--color-primario);
+}
+
+tr.eliminando {
+    animation: fadeOut 0.3s ease-out;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+}
+
+.item-imagen {
+    width: 60px;
+    height: 60px;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.item-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.item-imagen i {
+    font-size: 1.5rem;
+    color: #ccc;
+}
+
+.item-nombre {
+    font-weight: 600;
+}
+
+.item-precio, .item-subtotal {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.control-cantidad {
+    display: flex;
+    border: 1px solid #ddd;
+    width: 100px;
+}
+
+.control-cantidad button {
+    background: #eee;
+    border: none;
+    padding: 5px 8px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.control-cantidad input {
+    width: 30px;
+    text-align: center;
+    border: none;
+    padding: 5px;
+}
+
+.btn-eliminar {
+    background: none;
+    border: none;
+    color: var(--color-error);
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+
+.acciones-carrito {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.resumen-pedido {
+    position: sticky;
+    top: 70px;
+    height: fit-content;
+    background: white;
+    border: 1px solid #ddd;
+    padding: 15px;
+}
+
+.resumen-contenido h3 {
+    font-size: 1.2rem;
+    color: var(--color-secundario);
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+}
+
+.resumen-linea {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 0.9rem;
+}
+
+.resumen-linea.envio {
+    flex-direction: column;
+    gap: 5px;
+}
+
+.resumen-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0 5px;
+    border-top: 1px solid #ddd;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.resumen-total span:last-child {
+    color: var(--color-primario);
+}
+
+.btn-checkout {
+    width: 100%;
+    margin-top: 15px;
+}
+
+@media (max-width: 900px) {
+    .contenedor-carrito {
+        grid-template-columns: 1fr;
+    }
+    .resumen-pedido {
+        position: static;
+    }
+}
+
+.info-usuario {
+    margin-top: 15px;
+    padding: 12px;
+    background: #f0f9ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 4px;
+}
+
+.usuario-logueado {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--color-secundario);
+}
+
+.usuario-logueado i {
+    font-size: 1.2rem;
+    color: var(--color-primario);
+}
+
+.nombre-usuario-clickable {
+    cursor: pointer;
+    color: var(--color-secundario);
+    font-weight: 600;
+    transition: all 0.2s ease;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+.nombre-usuario-clickable:hover {
+    color: var(--color-primario);
+    background: rgba(67, 56, 202, 0.1);
+    text-decoration: underline;
+}
+
+/* Modal de Login */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-contenido-login {
+    background: white;
+    border-radius: 8px;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    background: var(--color-secundario);
+    color: white;
+    padding: 20px;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-cerrar-modal {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    transition: transform 0.2s;
+}
+
+.btn-cerrar-modal:hover {
+    transform: scale(1.1);
+}
+
+.modal-body {
+    padding: 25px;
+}
+
+.modal-body p {
+    margin-bottom: 20px;
+    color: var(--color-texto-claro);
+    line-height: 1.6;
+}
+
+.modal-acciones {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.modal-acciones .btn {
+    flex: 1;
+}
+
+.modal-info {
+    background: #f0f9ff;
+    padding: 12px;
+    border-left: 3px solid var(--color-primario);
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: var(--color-texto-claro);
+    margin: 0;
+}
+
+.modal-info i {
+    color: var(--color-primario);
+    margin-right: 5px;
+}
+
+@media (max-width: 900px) {
+    .contenedor-carrito {
+        grid-template-columns: 1fr;
+    }
+    .resumen-pedido {
+        position: static;
+    }
+}
+
+@media (max-width: 600px) {
+    .tabla-productos {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .modal-acciones {
+        flex-direction: column;
+    }
+
+    .modal-contenido-login {
+        width: 95%;
+    }
+}
