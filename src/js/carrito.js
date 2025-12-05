@@ -4,9 +4,8 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // ============================================
+
     // REFERENCIAS DOM
-    // ============================================
     const itemsCarritoBody = document.getElementById('items-carrito');
     const carritoVacioDiv = document.getElementById('carrito-vacio');
     const carritoContenidoDiv = document.getElementById('carrito-contenido');
@@ -19,13 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const IVA_RATE = 0.16;
     let draggedElement = null;
 
-    // ============================================
-    // FUNCIONES DE CARRITO
-    // ============================================
 
-    /**
-     * Obtener carrito desde localStorage
-     */
+    // FUNCIONES DE CARRITO
     function obtenerCarrito() {
         try {
             const carrito = localStorage.getItem('carrito');
@@ -36,9 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /**
-     * Guardar carrito en localStorage
-     */
     function guardarCarrito(carrito) {
         try {
             localStorage.setItem('carrito', JSON.stringify(carrito));
@@ -48,9 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /**
-     * Renderizar carrito completo
-     */
+
     function renderCarrito() {
         const carrito = obtenerCarrito();
         itemsCarritoBody.innerHTML = '';
@@ -78,7 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             <i class="fas fa-grip-vertical"></i>
                         </span>
                         <div class="item-imagen">
-                            <i class="fas fa-box-open"></i>
+                            ${item.imagen ?
+                                `<img src="/Proyecto_DesarrolloWeb/uploads/productos/${item.imagen}" alt="${item.nombre}" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas fa-box-open\\'></i>';">` :
+                                '<i class="fas fa-box-open"></i>'}
                         </div>
                         <div class="item-detalles">
                             <span class="item-nombre">${item.nombre}</span>
@@ -110,13 +101,8 @@ document.addEventListener('DOMContentLoaded', () => {
         attachEventos();
     }
 
-    // ============================================
-    // DRAG & DROP (FUNCIONALIDAD EXTRA)
-    // ============================================
 
-    /**
-     * Adjuntar eventos de Drag & Drop HTML5
-     */
+    // DRAG & DROP 
     function attachDragAndDrop() {
         const items = itemsCarritoBody.querySelectorAll('tr[draggable="true"]');
 
@@ -169,9 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /**
-     * Actualizar orden del carrito después del Drag & Drop
-     */
+
     function actualizarOrden() {
         const items = itemsCarritoBody.querySelectorAll('tr');
         const carrito = obtenerCarrito();
@@ -187,13 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mostrarToast('Orden actualizado', 'exito');
     }
 
-    // ============================================
     // MANEJO DE EVENTOS
-    // ============================================
-
-    /**
-     * Adjuntar eventos a controles del carrito
-     */
     function attachEventos() {
         // Botones eliminar
         document.querySelectorAll('.btn-eliminar').forEach(btn => {
@@ -222,9 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /**
-     * Cambiar cantidad con botones + y -
-     */
     function cambiarCantidad(id, accion) {
         let carrito = obtenerCarrito();
         const item = carrito.find(i => i.id === id);
@@ -248,9 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /**
-     * Actualizar cantidad con input directo
-     */
+
     function actualizarCantidad(id, cantidad) {
         let carrito = obtenerCarrito();
         const item = carrito.find(i => i.id === id);
@@ -268,9 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /**
-     * Eliminar producto del carrito
-     */
+ 
     function eliminarItem(id) {
         let carrito = obtenerCarrito();
         const item = carrito.find(i => i.id === id);
@@ -283,9 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /**
-     * Vaciar todo el carrito
-     */
+
     function vaciarCarrito() {
         if (confirm('¿Estás seguro de vaciar el carrito?')) {
             localStorage.removeItem('carrito');
@@ -294,13 +263,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ============================================
-    // CÁLCULOS
-    // ============================================
-
-    /**
-     * Actualizar totales (subtotal, IVA, envío, total)
-     */
     function actualizarTotales() {
         const carrito = obtenerCarrito();
         const subtotal = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
@@ -313,9 +275,6 @@ document.addEventListener('DOMContentLoaded', () => {
         totalSpan.textContent = `$${total.toFixed(2)}`;
     }
 
-    /**
-     * Actualizar contador del carrito en navegación
-     */
     function actualizarContador() {
         const carrito = obtenerCarrito();
         const total = carrito.reduce((sum, item) => sum + item.cantidad, 0);
@@ -330,13 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ============================================
     // UI/UX
-    // ============================================
-
-    /**
-     * Mostrar notificación toast
-     */
     function mostrarToast(mensaje, tipo = 'exito') {
         const toastExistente = document.querySelector('.toast');
         if (toastExistente) toastExistente.remove();
@@ -356,11 +309,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3000);
     }
 
-    // ============================================
-    // EVENT LISTENERS PRINCIPALES
-    // ============================================
 
-    // Vaciar carrito
+    // EVENT LISTENERS PRINCIPALES
     if (vaciarCarritoBtn) {
         vaciarCarritoBtn.addEventListener('click', vaciarCarrito);
     }
@@ -370,11 +320,149 @@ document.addEventListener('DOMContentLoaded', () => {
         tipoEnvioSelect.addEventListener('change', actualizarTotales);
     }
 
-    // ============================================
-    // INICIALIZACIÓN
-    // ============================================
 
+    // AUTENTICACIÓN Y FINALIZAR PEDIDO
+    const btnFinalizarPedido = document.getElementById('btn-finalizar-pedido');
+    const modalLogin = document.getElementById('modal-login');
+    const cerrarModalBtn = document.getElementById('cerrar-modal-login');
+    const continuarSinLoginBtn = document.getElementById('continuar-sin-login');
+    const infoUsuarioDiv = document.getElementById('info-usuario');
+    const nombreUsuarioSpan = document.getElementById('nombre-usuario');
+
+    function verificarUsuario() {
+        const user = localStorage.getItem('user');
+        if (user) {
+            try {
+                const userData = JSON.parse(user);
+                if (userData && userData.id) {
+                    // Usuario logueado - mostrar info
+                    nombreUsuarioSpan.textContent = userData.nombre;
+                    infoUsuarioDiv.style.display = 'block';
+
+                    // Adjuntar evento de logout al nombre
+                    nombreUsuarioSpan.addEventListener('click', handleLogout);
+
+                    return userData;
+                }
+            } catch (error) {
+                console.error('Error al leer usuario:', error);
+            }
+        }
+        return null;
+    }
+
+    function handleLogout() {
+        if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+            // Limpiar datos del usuario
+            localStorage.removeItem('user');
+
+            // Ocultar info de usuario
+            infoUsuarioDiv.style.display = 'none';
+            nombreUsuarioSpan.textContent = '';
+
+            // Mostrar notificación
+            mostrarToast('Sesión cerrada correctamente', 'exito');
+
+            // Redirigir a inicio después de 1 segundo
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+        }
+    }
+
+
+    if (btnFinalizarPedido) {
+        btnFinalizarPedido.addEventListener('click', () => {
+            const carrito = obtenerCarrito();
+
+            if (carrito.length === 0) {
+                mostrarToast('Tu carrito está vacío', 'error');
+                return;
+            }
+
+            const user = verificarUsuario();
+
+            if (user) {
+                // Usuario logueado - proceder con el pedido
+                finalizarPedido(user);
+            } else {
+                // No está logueado - mostrar modal
+                modalLogin.style.display = 'flex';
+            }
+        });
+    }
+
+    async function finalizarPedido(user) {
+        const carrito = obtenerCarrito();
+        const subtotal = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+        const costoEnvio = parseFloat(tipoEnvioSelect.value);
+        const iva = subtotal * IVA_RATE;
+        const total = subtotal + iva + costoEnvio;
+
+        const pedidoData = {
+            usuario_id: user.id,
+            items: carrito,
+            subtotal: subtotal,
+            iva: iva,
+            envio: costoEnvio,
+            total: total,
+            tipo_envio: tipoEnvioSelect.options[tipoEnvioSelect.selectedIndex].text
+        };
+
+        try {
+            btnFinalizarPedido.disabled = true;
+            btnFinalizarPedido.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+
+            // const response = await Ajax.post('/Proyecto_DesarrolloWeb/php/api/pedidos.php', pedidoData);
+
+            // Por ahora simulamos éxito
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            mostrarToast('¡Pedido realizado con éxito!', 'exito');
+
+            // Limpiar carrito
+            localStorage.removeItem('carrito');
+
+            // Redirigir después de 2 segundos
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
+
+        } catch (error) {
+            console.error('Error al finalizar pedido:', error);
+            mostrarToast('Error al procesar el pedido', 'error');
+            btnFinalizarPedido.disabled = false;
+            btnFinalizarPedido.innerHTML = '<i class="fas fa-check-circle"></i> Finalizar Pedido';
+        }
+    }
+
+
+    if (cerrarModalBtn) {
+        cerrarModalBtn.addEventListener('click', () => {
+            modalLogin.style.display = 'none';
+        });
+    }
+
+
+    if (continuarSinLoginBtn) {
+        continuarSinLoginBtn.addEventListener('click', () => {
+            window.location.href = 'contacto.html';
+        });
+    }
+
+    // Cerrar modal al hacer click fuera
+    if (modalLogin) {
+        modalLogin.addEventListener('click', (e) => {
+            if (e.target === modalLogin) {
+                modalLogin.style.display = 'none';
+            }
+        });
+    }
+
+
+    // INICIALIZACIÓN
     console.log('Inicializando carrito de compras...');
     renderCarrito();
+    verificarUsuario();
     console.log('Carrito inicializado correctamente');
 });

@@ -5,9 +5,8 @@
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // ============================================
+
     // VARIABLES GLOBALES
-    // ============================================
     let productosData = [];
     let productosFiltrados = [];
     let paginaActual = 1;
@@ -16,9 +15,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // URL base de la API
     const API_URL = window.location.origin + '/Proyecto_DesarrolloWeb/php/api/productos.php';
 
-    // ============================================
+
     // REFERENCIAS DOM
-    // ============================================
     const productosGrid = document.getElementById('productos-grid');
     const totalProductosSpan = document.getElementById('total-productos');
     const paginaAnteriorBtn = document.getElementById('pagina-anterior');
@@ -31,13 +29,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const filtroCategoriaSelect = document.getElementById('filtro-categoria');
     const precioMaxInput = document.getElementById('precio-max');
 
-    // ============================================
-    // FUNCIONES DE CARGA DE DATOS
-    // ============================================
 
-    /**
-     * Cargar productos desde la API
-     */
+    // FUNCIONES DE CARGA DE DATOS
     async function cargarProductos() {
         try {
             mostrarCargando(true);
@@ -81,9 +74,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    /**
-     * Cargar categorías para el filtro
-     */
+
     async function cargarCategorias() {
         try {
             const response = await fetch(`${API_URL}?action=categorias`);
@@ -114,13 +105,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // ============================================
-    // FUNCIONES DE RENDERIZADO
-    // ============================================
 
-    /**
-     * Renderizar productos en el grid
-     */
+    // FUNCIONES DE RENDERIZADO
     function renderProductos() {
         productosGrid.innerHTML = '';
 
@@ -157,9 +143,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         renderPaginacion();
     }
 
-    /**
-     * Crear tarjeta de producto
-     */
     function crearTarjetaProducto(producto) {
         const card = document.createElement('div');
         card.classList.add('producto-card');
@@ -172,7 +155,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         card.innerHTML = `
             <div class="producto-imagen">
-                <i class="fas fa-box-open"></i>
+                ${producto.imagen ?
+                    `<img src="/Proyecto_DesarrolloWeb/uploads/productos/${producto.imagen}" alt="${producto.nombre}" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas fa-box-open\\'></i>';">` :
+                    '<i class="fas fa-box-open"></i>'}
                 ${producto.destacado ? '<span class="badge-destacado"><i class="fas fa-star"></i> Destacado</span>' : ''}
             </div>
             <div class="producto-info">
@@ -202,9 +187,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return card;
     }
 
-    /**
-     * Renderizar paginación
-     */
+
     function renderPaginacion() {
         numerosPaginaDiv.innerHTML = '';
         const totalPaginas = Math.ceil(productosFiltrados.length / productosPorPagina);
@@ -235,13 +218,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // ============================================
     // FUNCIONES DEL CARRITO
-    // ============================================
-
-    /**
-     * Adjuntar eventos a botones de agregar al carrito
-     */
     function attachEventosCarrito() {
         document.querySelectorAll('.btn-agregar-carrito').forEach(button => {
             button.addEventListener('click', (e) => {
@@ -258,9 +235,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    /**
-     * Agregar producto al carrito (localStorage)
-     */
     function agregarAlCarrito(producto) {
         try {
             let carrito = obtenerCarrito();
@@ -308,9 +282,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    /**
-     * Obtener carrito desde localStorage
-     */
     function obtenerCarrito() {
         try {
             const carrito = localStorage.getItem('carrito');
@@ -321,9 +292,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    /**
-     * Guardar carrito en localStorage
-     */
     function guardarCarrito(carrito) {
         try {
             localStorage.setItem('carrito', JSON.stringify(carrito));
@@ -333,9 +301,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    /**
-     * Actualizar contador del carrito en la navegación
-     */
+
     function actualizarContadorCarrito() {
         const carrito = obtenerCarrito();
         const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
@@ -350,13 +316,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // ============================================
     // FUNCIONES DE UI
-    // ============================================
-
-    /**
-     * Mostrar/ocultar indicador de cargando
-     */
     function mostrarCargando(mostrar) {
         if (mostrar) {
             productosGrid.innerHTML = `
@@ -368,9 +328,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    /**
-     * Mostrar mensaje de error
-     */
     function mostrarError(mensaje) {
         productosGrid.innerHTML = `
             <div class="mensaje-error">
@@ -381,9 +338,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         `;
     }
 
-    /**
-     * Mostrar notificación toast
-     */
     function mostrarToast(mensaje, tipo = 'exito') {
         // Remover toast anterior si existe
         const toastExistente = document.querySelector('.toast');
@@ -410,9 +364,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }, 3000);
     }
 
-    /**
-     * Truncar texto
-     */
+
     function truncarTexto(texto, maxLength) {
         if (!texto) return '';
         return texto.length > maxLength
@@ -420,16 +372,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             : texto;
     }
 
-    // ============================================
-    // EVENT LISTENERS
-    // ============================================
 
-    // Botón aplicar filtros
+    // EVENT LISTENERS
+
     if (btnAplicarFiltros) {
         btnAplicarFiltros.addEventListener('click', cargarProductos);
     }
 
-    // Botón limpiar filtros
     if (btnLimpiarFiltros) {
         btnLimpiarFiltros.addEventListener('click', () => {
             buscarInput.value = '';
@@ -440,12 +389,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // Cambio en selector de ordenamiento
     if (ordenarSelect) {
         ordenarSelect.addEventListener('change', cargarProductos);
     }
 
-    // Búsqueda en tiempo real (con debounce)
     if (buscarInput) {
         let searchTimeout;
         buscarInput.addEventListener('input', () => {
@@ -454,7 +401,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // Navegación de páginas
     if (paginaAnteriorBtn) {
         paginaAnteriorBtn.addEventListener('click', () => {
             if (paginaActual > 1) {
@@ -476,20 +422,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // ============================================
-    // INICIALIZACIÓN
-    // ============================================
 
+    // INICIALIZACIÓN
     console.log('Inicializando catálogo de productos...');
 
-    // Cargar categorías primero
     await cargarCategorias();
-
-    // Luego cargar productos
     await cargarProductos();
-
-    // Actualizar contador del carrito
     actualizarContadorCarrito();
-
     console.log('Catálogo inicializado correctamente');
 });

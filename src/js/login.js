@@ -4,10 +4,16 @@
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // Verificar si ya está logueado
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectTo = urlParams.get('redirect');
+
     const user = Storage.get('user');
     if (user && user.id) {
-        window.location.href = 'index.html';
+        if (redirectTo) {
+            window.location.href = `${redirectTo}.html`;
+        } else {
+            window.location.href = 'index.html';
+        }
         return;
     }
 
@@ -19,7 +25,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const mostrarRegistro = document.getElementById('mostrar-registro');
     const mostrarLogin = document.getElementById('mostrar-login');
 
-    // Alternar entre login y registro
     mostrarRegistro.addEventListener('click', (e) => {
         e.preventDefault();
         loginBox.style.display = 'none';
@@ -32,7 +37,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         loginBox.style.display = 'block';
     });
 
-    // Toggle visibilidad de contraseña
     document.querySelectorAll('.toggle-password').forEach(btn => {
         btn.addEventListener('click', () => {
             const targetId = btn.dataset.target;
@@ -51,11 +55,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    // ========================================
-    // VALIDACIÓN EN TIEMPO REAL
-    // ========================================
 
-    // Validar email en tiempo real
+    // VALIDACIÓN EN TIEMPO REAL
     ['login-email', 'registro-email'].forEach(id => {
         const input = document.getElementById(id);
         input.addEventListener('blur', () => {
@@ -130,9 +131,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // ========================================
+
     // MANEJO DE FORMULARIOS
-    // ========================================
 
     // Login
     formLogin.addEventListener('submit', async (e) => {
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Iniciando sesión...';
 
-            const response = await Ajax.post('/php/api/auth.php?action=login', {
+            const response = await Ajax.post('/Proyecto_DesarrolloWeb/php/api/auth.php?action=login', {
                 email: email,
                 password: password,
                 csrf_token: Auth.csrfToken
@@ -171,7 +171,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 // Redireccionar después de 1 segundo
                 setTimeout(() => {
-                    window.location.href = 'index.html';
+                    if (redirectTo) {
+                        window.location.href = `${redirectTo}.html`;
+                    } else {
+                        window.location.href = 'index.html';
+                    }
                 }, 1000);
             } else {
                 window.mostrarToast(response.message || 'Error al iniciar sesión', 'error');
@@ -229,7 +233,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registrando...';
 
-            const response = await Ajax.post('/php/api/auth.php?action=register', {
+            const response = await Ajax.post('/Proyecto_DesarrolloWeb/php/api/auth.php?action=register', {
                 nombre: nombre,
                 email: email,
                 telefono: telefono || null,
@@ -265,10 +269,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // ========================================
-    // FUNCIONES AUXILIARES
-    // ========================================
 
+    // FUNCIONES AUXILIARES
     function mostrarError(element, mensaje) {
         element.textContent = mensaje;
         element.style.display = 'block';

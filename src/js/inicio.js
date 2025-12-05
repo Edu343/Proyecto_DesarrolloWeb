@@ -1,17 +1,12 @@
 /**
  * Inicio - Página Principal
- * Incluye: Productos destacados + APIs de Terceros (Funcionalidad Extra #1)
- * API 1: OpenWeatherMap (Clima)
- * API 2: ExchangeRate-API (Tipo de Cambio)
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
     const productosDestacadosContainer = document.getElementById('productos-destacados');
 
-    // ========================================
-    // PRODUCTOS DESTACADOS (con AJAX)
-    // ========================================
 
+    // PRODUCTOS DESTACADOS (con AJAX)
     async function cargarProductosDestacados() {
         try {
             const response = await Ajax.get('/Proyecto_DesarrolloWeb/php/api/productos.php', {
@@ -22,7 +17,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (response.success && response.data.length > 0) {
                 renderProductos(response.data);
             } else {
-                // Usar productos de respaldo
                 usarProductosRespaldo();
             }
         } catch (error) {
@@ -83,16 +77,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const producto = productos.find(p => p.id === id);
 
                 if (producto && window.Carrito) {
-                    window.Carrito.agregar(producto);
+                    // Ensure the product has the correct structure for the Carrito
+                    const productoParaCarrito = {
+                        id: producto.id,
+                        nombre: producto.nombre,
+                        precio: parseFloat(producto.precio),
+                        imagen: producto.imagen || null,
+                        stock: producto.stock || 0
+                    };
+                    window.Carrito.agregar(productoParaCarrito);
                 }
             });
         });
     }
 
-    // ========================================
     // CATEGORÍAS CLICKEABLES
-    // ========================================
-
     document.querySelectorAll('.categoria-card').forEach(card => {
         card.addEventListener('click', (e) => {
             const categoria = e.currentTarget.dataset.categoria;
@@ -100,11 +99,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    // ========================================
-    // FUNCIONALIDAD EXTRA #1: APIs DE TERCEROS
-    // ========================================
-
-    // Widget para mostrar información de APIs
+    //APIs DE TERCEROS
     const apiWidget = document.createElement('div');
     apiWidget.id = 'api-widgets';
     apiWidget.style.cssText = `
@@ -119,71 +114,61 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.body.appendChild(apiWidget);
 
     /**
-     * API 1: OpenWeatherMap - Clima actual
-     * https://openweathermap.org/api
+     * API 1: Widget de Ofertas y Promociones
+     * Muestra las ofertas especiales de la ferretería
      */
-    async function cargarClima() {
+    async function cargarOfertas() {
         try {
-            // API Key de ejemplo (reemplazar con una real)
-            const API_KEY = 'demo'; // Usar 'demo' para propósitos de ejemplo
-            const ciudad = 'Merida,MX';
-
-            // Para demo, usamos datos simulados
-            const climaData = {
-                temp: 28,
-                description: 'Soleado',
-                icon: '01d',
-                humidity: 65
+            // Datos de ofertas actuales
+            const ofertasData = {
+                titulo: 'Ofertas Especiales',
+                descuento: '20%',
+                categoria: 'Herramientas Eléctricas',
+                validoHasta: calcularFechaVencimiento(7) // 7 días
             };
 
-            mostrarWidgetClima(climaData);
-
-            /* Código real (descomentar con API key válida):
-            const url = `https://api.openweathermap.org/data/2.5/weather?q=${ciudad}&appid=${API_KEY}&units=metric&lang=es`;
-            const response = await fetch(url);
-            const data = await response.json();
-
-            const climaData = {
-                temp: Math.round(data.main.temp),
-                description: data.weather[0].description,
-                icon: data.weather[0].icon,
-                humidity: data.main.humidity
-            };
-
-            mostrarWidgetClima(climaData);
-            */
+            mostrarWidgetOfertas(ofertasData);
 
         } catch (error) {
-            console.error('Error al cargar clima:', error);
+            console.error('Error al cargar ofertas:', error);
         }
     }
 
-    function mostrarWidgetClima(data) {
+    function calcularFechaVencimiento(dias) {
+        const fecha = new Date();
+        fecha.setDate(fecha.getDate() + dias);
+        return fecha.toLocaleDateString('es-MX', { day: 'numeric', month: 'short' });
+    }
+
+    function mostrarWidgetOfertas(data) {
         const widget = document.createElement('div');
-        widget.className = 'api-widget clima-widget';
+        widget.className = 'api-widget ofertas-widget';
         widget.style.cssText = `
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             color: white;
             padding: 15px;
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            min-width: 200px;
+            min-width: 220px;
             cursor: pointer;
             transition: transform 0.2s;
         `;
 
         widget.innerHTML = `
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-                <div>
-                    <div style="font-size: 0.85rem; opacity: 0.9;">Mérida, Yuc.</div>
-                    <div style="font-size: 2rem; font-weight: bold;">${data.temp}°C</div>
-                    <div style="font-size: 0.9rem; text-transform: capitalize;">${data.description}</div>
-                    <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 5px;">
-                        <i class="fas fa-tint"></i> Humedad: ${data.humidity}%
-                    </div>
+            <div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                    <i class="fas fa-tag" style="font-size: 1.2rem;"></i>
+                    <div style="font-size: 0.9rem; font-weight: bold;">${data.titulo}</div>
                 </div>
-                <div style="font-size: 3rem;">
-                    ${data.temp > 25 ? '☀️' : '⛅'}
+                <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;">
+                    <span style="font-size: 2.5rem; font-weight: bold;">${data.descuento}</span>
+                    <span style="font-size: 0.9rem;">DESCUENTO</span>
+                </div>
+                <div style="font-size: 0.85rem; margin-bottom: 5px;">
+                    <i class="fas fa-wrench"></i> ${data.categoria}
+                </div>
+                <div style="font-size: 0.75rem; opacity: 0.9; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 8px; margin-top: 8px;">
+                    <i class="fas fa-clock"></i> Válido hasta ${data.validoHasta}
                 </div>
             </div>
         `;
@@ -194,6 +179,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         widget.addEventListener('mouseleave', () => {
             widget.style.transform = 'scale(1)';
+        });
+
+        widget.addEventListener('click', () => {
+            window.location.href = 'productos.html';
         });
 
         apiWidget.appendChild(widget);
@@ -213,7 +202,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             mostrarWidgetTipoCambio(tasaData);
 
-            /* Código real (descomentar para usar API real):
+            /* Código real:
             const url = 'https://api.exchangerate-api.com/v4/latest/USD';
             const response = await fetch(url);
             const data = await response.json();
@@ -298,9 +287,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         apiWidget.appendChild(widget);
     }
 
-    /**
-     * Botón para ocultar/mostrar widgets
-     */
+
     function crearBotonToggle() {
         const toggleBtn = document.createElement('button');
         toggleBtn.innerHTML = '<i class="fas fa-info-circle"></i>';
@@ -338,12 +325,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.body.appendChild(toggleBtn);
     }
 
-    // ========================================
     // INICIALIZACIÓN
-    // ========================================
-
     await cargarProductosDestacados();
-    await cargarClima();
+    await cargarOfertas();
     await cargarTipoCambio();
     crearBotonToggle();
 });

@@ -3,13 +3,11 @@
  * Incluye: AJAX, localStorage, cookies, autenticación
  */
 
-// ============================================
 // CONFIGURACIÓN Y UTILIDADES
-// ============================================
+
 
 const API_BASE = window.location.origin + '/Proyecto_DesarrolloWeb/php/api/';
 
-// Manejo de Cookies
 const Cookie = {
     set: (name, value, days = 7) => {
         const expires = new Date(Date.now() + days * 864e5).toUTCString();
@@ -26,7 +24,7 @@ const Cookie = {
     }
 };
 
-// Manejo de localStorage
+
 const Storage = {
     set: (key, value) => {
         try {
@@ -49,7 +47,6 @@ const Storage = {
     }
 };
 
-// Cliente AJAX
 const Ajax = {
     async request(url, options = {}) {
         try {
@@ -97,9 +94,7 @@ const Ajax = {
     }
 };
 
-// ============================================
 // GESTIÓN DE SESIÓN Y AUTENTICACIÓN
-// ============================================
 
 const Auth = {
     csrfToken: null,
@@ -158,9 +153,8 @@ const Auth = {
     }
 };
 
-// ============================================
+
 // GESTIÓN DEL CARRITO
-// ============================================
 
 const Carrito = {
     items: [],
@@ -242,10 +236,8 @@ const Carrito = {
     }
 };
 
-// ============================================
-// NOTIFICACIONES (TOASTS)
-// ============================================
 
+// NOTIFICACIONES (TOASTS)
 window.mostrarToast = (mensaje, tipo = 'exito') => {
     const toastExistente = document.querySelector('.toast');
     if (toastExistente) {
@@ -267,10 +259,8 @@ window.mostrarToast = (mensaje, tipo = 'exito') => {
     }, 3000);
 };
 
-// ============================================
-// VALIDACIÓN DE FORMULARIOS
-// ============================================
 
+// VALIDACIÓN DE FORMULARIOS
 const Validacion = {
     email(email) {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -302,14 +292,13 @@ const Validacion = {
     }
 };
 
-// ============================================
-// INICIALIZACIÓN
-// ============================================
 
+// INICIALIZACIÓN
 document.addEventListener('DOMContentLoaded', async () => {
     // Inicializar sistemas
     await Auth.init();
     Carrito.init();
+    initUserMenu();
 
     // Menú Hamburguesa
     const menuHamburguesa = document.getElementById('menu-hamburguesa');
@@ -330,3 +319,38 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.Validacion = Validacion;
     window.actualizarContadorCarrito = () => Carrito.actualizarContador();
 });
+
+
+// GESTIÓN DEL MENÚ DE USUARIO
+function initUserMenu() {
+    const userMenu = document.getElementById('user-menu');
+    const navUserNombre = document.getElementById('nav-user-nombre');
+    const btnLogout = document.getElementById('btn-logout');
+
+    if (!userMenu || !navUserNombre || !btnLogout) {
+        return; 
+    }
+
+    // Verificar si hay usuario logueado
+    const user = Storage.get('user');
+    if (user && user.id) {
+        // Mostrar menú de usuario
+        navUserNombre.textContent = user.nombre;
+        userMenu.style.display = 'flex';
+
+        // Adjuntar evento de logout
+        btnLogout.addEventListener('click', handleNavLogout);
+    }
+}
+
+function handleNavLogout() {
+    if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+        Storage.remove('user');
+
+        window.mostrarToast('Sesión cerrada correctamente', 'exito');
+
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 1000);
+    }
+}

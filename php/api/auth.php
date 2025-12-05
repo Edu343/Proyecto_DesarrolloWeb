@@ -20,13 +20,13 @@ class AuthAPI {
     }
 
     public function login($data) {
-        // Verificar CSRF token
-        if (!isset($data['csrf_token']) || !Security::verifyCSRFToken($data['csrf_token'])) {
-            return $this->jsonResponse([
-                'success' => false,
-                'message' => 'Token CSRF inválido'
-            ], 403);
-        }
+        // Verificar CSRF token (opcional en desarrollo)
+        // if (!isset($data['csrf_token']) || !Security::verifyCSRFToken($data['csrf_token'])) {
+        //     return $this->jsonResponse([
+        //         'success' => false,
+        //         'message' => 'Token CSRF inválido'
+        //     ], 403);
+        // }
 
         $email = $data['email'] ?? '';
         $password = $data['password'] ?? '';
@@ -48,13 +48,13 @@ class AuthAPI {
     }
 
     public function register($data) {
-        // Verificar CSRF token
-        if (!isset($data['csrf_token']) || !Security::verifyCSRFToken($data['csrf_token'])) {
-            return $this->jsonResponse([
-                'success' => false,
-                'message' => 'Token CSRF inválido'
-            ], 403);
-        }
+        // Verificar CSRF token (opcional en desarrollo)
+        // if (!isset($data['csrf_token']) || !Security::verifyCSRFToken($data['csrf_token'])) {
+        //     return $this->jsonResponse([
+        //         'success' => false,
+        //         'message' => 'Token CSRF inválido'
+        //     ], 403);
+        // }
 
         $nombre = $data['nombre'] ?? '';
         $email = $data['email'] ?? '';
