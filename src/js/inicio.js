@@ -189,53 +189,57 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
-     * API 2: ExchangeRate-API - Tipo de Cambio
+     * API 2: ExchangeRate-API - Tipo de Cambio USD a MXN
      * https://www.exchangerate-api.com/
+     * API real de terceros para obtener el tipo de cambio actualizado
      */
     async function cargarTipoCambio() {
         try {
-            // Para demo, usamos datos simulados
-            const tasaData = {
-                usd_to_mxn: 17.25,
-                fecha: new Date().toLocaleDateString('es-MX')
+            // Usar API real de tipo de cambio
+            const urlApi = 'https://api.exchangerate-api.com/v4/latest/USD';
+            const respuesta = await fetch(urlApi);
+
+            if (!respuesta.ok) {
+                throw new Error('Error al obtener tipo de cambio');
+            }
+
+            const datos = await respuesta.json();
+
+            // Extraer tasa de cambio MXN
+            const datosTasa = {
+                usd_a_mxn: datos.rates.MXN.toFixed(2),
+                fecha: new Date(datos.date).toLocaleDateString('es-MX')
             };
 
-            mostrarWidgetTipoCambio(tasaData);
+            mostrarWidgetTipoCambio(datosTasa);
 
-            /* Código real:
-            const url = 'https://api.exchangerate-api.com/v4/latest/USD';
-            const response = await fetch(url);
-            const data = await response.json();
-
-            const tasaData = {
-                usd_to_mxn: data.rates.MXN.toFixed(2),
-                fecha: new Date(data.date).toLocaleDateString('es-MX')
-            };
-
-            mostrarWidgetTipoCambio(tasaData);
-
-            // Guardar en localStorage para caché
+            // Guardar en localStorage para caché (válido por 24 horas)
             Storage.set('tipo_cambio', {
-                tasa: tasaData.usd_to_mxn,
+                tasa: datosTasa.usd_a_mxn,
                 fecha: Date.now()
             });
-            */
 
         } catch (error) {
             console.error('Error al cargar tipo de cambio:', error);
 
-            // Intentar cargar del caché
+            // Intentar cargar del caché si la API falla
             const cache = Storage.get('tipo_cambio');
             if (cache && (Date.now() - cache.fecha) < 86400000) { // 24 horas
                 mostrarWidgetTipoCambio({
-                    usd_to_mxn: cache.tasa,
+                    usd_a_mxn: cache.tasa,
                     fecha: new Date(cache.fecha).toLocaleDateString('es-MX')
+                });
+            } else {
+                // Si no hay caché válido, usar datos de respaldo
+                mostrarWidgetTipoCambio({
+                    usd_a_mxn: 17.25,
+                    fecha: new Date().toLocaleDateString('es-MX')
                 });
             }
         }
     }
 
-    function mostrarWidgetTipoCambio(data) {
+    function mostrarWidgetTipoCambio(datos) {
         const widget = document.createElement('div');
         widget.className = 'api-widget cambio-widget';
         widget.style.cssText = `
@@ -255,14 +259,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <i class="fas fa-dollar-sign"></i> Tipo de Cambio
                 </div>
                 <div style="display: flex; align-items: baseline; gap: 5px;">
-                    <span style="font-size: 1.5rem; font-weight: bold;">$${data.usd_to_mxn}</span>
+                    <span style="font-size: 1.5rem; font-weight: bold;">$${datos.usd_a_mxn}</span>
                     <span style="font-size: 0.9rem;">MXN</span>
                 </div>
                 <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 8px;">
-                    1 USD = ${data.usd_to_mxn} MXN
+                    1 USD = ${datos.usd_a_mxn} MXN
                 </div>
                 <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 5px;">
-                    Actualizado: ${data.fecha}
+                    Actualizado: ${datos.fecha}
                 </div>
             </div>
         `;
@@ -279,7 +283,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         widget.addEventListener('click', () => {
             const monto = prompt('Ingresa cantidad en USD para convertir a MXN:');
             if (monto && !isNaN(monto)) {
-                const conversion = (parseFloat(monto) * data.usd_to_mxn).toFixed(2);
+                const conversion = (parseFloat(monto) * datos.usd_a_mxn).toFixed(2);
                 window.mostrarToast(`$${monto} USD = $${conversion} MXN`, 'exito');
             }
         });
