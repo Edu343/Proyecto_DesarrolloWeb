@@ -2,6 +2,8 @@
 /**
  * Gestor de Sesiones
  * Manejo seguro de sesiones de usuario
+ *
+ * REQUISITO: MANEJO DE SESIONES DE USUARIO (2 PTS) - IMPLEMENTADO AQUÍ
  */
 
 require_once __DIR__ . '/../config/database.php';

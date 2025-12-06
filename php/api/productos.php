@@ -3,6 +3,9 @@
  * API REST de Productos - Versión Definitiva Unificada
  * Compatible con XAMPP - Sin stored procedures complejos
  * Cumple todos los requisitos académicos
+ *
+ * REQUISITO: ADMINISTRAR CATÁLOGO CON BÚSQUEDA Y RELACIÓN ENTRE TABLAS (8 PTS) - PRODUCTOS RELACIONADOS CON CATEGORÍAS
+ * REQUISITO: USO DE AJAX + JSON CON SERVICIO WEB (2 PTS) - API REST CON JSON
  */
 
 // Configuración de errores (desarrollo)

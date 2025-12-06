@@ -1,6 +1,10 @@
 /**
  * Script Principal - Ferretería
  * Incluye: AJAX, localStorage, cookies, autenticación
+ *
+ * REQUISITO: MANEJO DE COOKIES Y LOCAL STORAGE (2 PTS) - IMPLEMENTADO AQUÍ
+ * REQUISITO: USO DE AJAX + JSON CON SERVICIO WEB (2 PTS) - OBJETO AJAX
+ * REQUISITO: JAVASCRIPT PARA VALIDACIÓN Y GENERACIÓN DINÁMICA (4 PTS) - VALIDACIONES Y DOM DINÁMICO
  */
 
 // CONFIGURACIÓN Y UTILIDADES
@@ -8,6 +12,7 @@
 
 const API_BASE = window.location.origin + '/Proyecto_DesarrolloWeb/php/api/';
 
+// REQUISITO: MANEJO DE COOKIES (2 PTS) - OBJETO COOKIE PARA GESTIÓN
 const Cookie = {
     set: (name, value, days = 7) => {
         const expires = new Date(Date.now() + days * 864e5).toUTCString();
@@ -24,7 +29,7 @@ const Cookie = {
     }
 };
 
-
+// REQUISITO: MANEJO DE LOCAL STORAGE (2 PTS) - OBJETO STORAGE PARA GESTIÓN
 const Storage = {
     set: (key, value) => {
         try {
@@ -47,6 +52,7 @@ const Storage = {
     }
 };
 
+// REQUISITO: USO DE AJAX + JSON (2 PTS) - OBJETO AJAX PARA LLAMADAS ASÍNCRONAS
 const Ajax = {
     async request(url, options = {}) {
         try {

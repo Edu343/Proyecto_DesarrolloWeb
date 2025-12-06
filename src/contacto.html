@@ -53,7 +53,7 @@
             <div class="grid-formulario-info">
                 <div class="formulario-contacto">
                     <h2>Envíanos un Mensaje</h2>
-                    <form id="form-contacto">
+                    <form id="form-contacto" enctype="multipart/form-data">
                         <div class="grupo-form">
                             <label>Nombre Completo *</label>
                             <input type="text" name="nombre" required>
@@ -64,13 +64,33 @@
                         </div>
                         <div class="grupo-form">
                             <label>Asunto *</label>
-                            <select name="asunto" required>
+                            <select name="asunto" id="asunto-select" required>
                                 <option value="">Selecciona un asunto</option>
                                 <option value="cotizacion">Solicitar Cotización</option>
                                 <option value="productos">Consulta de Productos</option>
+                                <option value="dano_producto">Reporte de Daño en Producto/Envío</option>
                                 <option value="otro">Otro</option>
                             </select>
                         </div>
+
+                        <div id="campos-dano" class="campos-dano" style="display: none;">
+                            <div class="grupo-form">
+                                <label>Número de Pedido (Opcional)</label>
+                                <input type="number" name="pedido_id" id="pedido_id" placeholder="Ej: 12345">
+                                <small>Si tienes el número de pedido, ingrésalo aquí</small>
+                            </div>
+                            <div class="grupo-form">
+                                <label>Fotos del Producto Dañado (Máximo 5 fotos)</label>
+                                <div class="upload-area" id="upload-area">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>Arrastra las fotos aquí o haz clic para seleccionar</p>
+                                    <input type="file" name="fotos[]" id="fotos-input" accept="image/*" multiple style="display: none;">
+                                    <small>Formatos: JPG, PNG, GIF, WEBP (Máx. 5MB cada una)</small>
+                                </div>
+                                <div id="preview-fotos" class="preview-fotos"></div>
+                            </div>
+                        </div>
+
                         <div class="grupo-form">
                             <label>Mensaje *</label>
                             <textarea name="mensaje" rows="5" required></textarea>

@@ -58,8 +58,120 @@
     margin-top: 10px;
 }
 
+.formulario-contacto small {
+    display: block;
+    margin-top: 5px;
+    color: #666;
+    font-size: 0.85rem;
+}
+
+/* Campos de daño */
+.campos-dano {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 15px 0;
+    border-left: 4px solid var(--color-primario);
+}
+
+.upload-area {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.upload-area:hover {
+    border-color: var(--color-primario);
+    background: #f8f9fa;
+}
+
+.upload-area.drag-over {
+    border-color: var(--color-primario);
+    background: #e3f2fd;
+}
+
+.upload-area i {
+    font-size: 3rem;
+    color: var(--color-primario);
+    margin-bottom: 10px;
+}
+
+.upload-area p {
+    margin: 10px 0 5px 0;
+    color: #333;
+    font-weight: 500;
+}
+
+/* Preview de fotos */
+.preview-fotos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.preview-item {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #ddd;
+    background: white;
+}
+
+.preview-item img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+}
+
+.preview-item .btn-eliminar-foto {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(220, 53, 69, 0.9);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.preview-item .btn-eliminar-foto:hover {
+    background: rgba(220, 53, 69, 1);
+    transform: scale(1.1);
+}
+
+.preview-item .nombre-archivo {
+    padding: 8px;
+    font-size: 0.75rem;
+    color: #666;
+    background: #f8f9fa;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 @media (max-width: 768px) {
     .grid-formulario-info {
         grid-template-columns: 1fr;
+    }
+
+    .preview-fotos {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+
+    .preview-item img {
+        height: 100px;
     }
 }

@@ -187,7 +187,8 @@ if ($method === 'POST' && $action === 'crear') {
             'total' => $total,
             'subtotal' => $subtotal,
             'iva' => $iva,
-            'costo_envio' => $costoEnvio
+            'costo_envio' => $costoEnvio,
+            'factura_url' => 'factura.html?pedido_id=' . $pedidoId
         ], 'Pedido creado exitosamente', 201);
 
     } catch (Exception $e) {
@@ -244,10 +245,12 @@ elseif ($method === 'GET' && $action === 'detalle') {
             sendResponse(false, null, 'ID de pedido inválido', 400);
         }
 
-        // Obtener información del pedido
+        // Obtener información del pedido con datos del usuario
         $stmt = $pdo->prepare("
-            SELECT * FROM pedidos
-            WHERE id = ? AND usuario_id = ?
+            SELECT p.*, u.nombre as usuario_nombre, u.email, u.telefono, u.direccion
+            FROM pedidos p
+            INNER JOIN usuarios u ON p.usuario_id = u.id
+            WHERE p.id = ? AND p.usuario_id = ?
         ");
         $stmt->execute([$pedidoId, $usuarioId]);
         $pedido = $stmt->fetch(PDO::FETCH_ASSOC);

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura - Ferretería El Constructor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* REQUISITO: DISEÑO DE INTERFAZ CON MEDIA-QUERY-PRINT (4 PTS) - FACTURA OPTIMIZADA PARA IMPRESIÓN */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            padding: 40px;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .factura-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #0066cc;
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #0066cc;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        .header .logo-icon {
+            font-size: 3rem;
+            color: #0066cc;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .factura-titulo {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .factura-titulo h2 {
+            color: #0066cc;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .estado-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .estado-pendiente { background: #fff3cd; color: #856404; }
+        .estado-procesando { background: #cfe2ff; color: #084298; }
+        .estado-completado { background: #d1e7dd; color: #0f5132; }
+        .estado-cancelado { background: #f8d7da; color: #842029; }
+
+        .info-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .info-box h3 {
+            color: #0066cc;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .info-box p {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .info-box strong {
+            color: #333;
+            display: inline-block;
+            min-width: 120px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+        }
+
+        thead {
+            background: #0066cc;
+            color: white;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .totales {
+            margin-top: 30px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .totales-box {
+            width: 350px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .totales-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .totales-row.total-final {
+            background: #0066cc;
+            color: white;
+            margin: 10px -20px -20px -20px;
+            padding: 15px 20px;
+            border-radius: 0 0 8px 8px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: none;
+        }
+
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #666;
+            border-top: 2px solid #eee;
+            padding-top: 30px;
+        }
+
+        .footer p {
+            margin: 10px 0;
+        }
+
+        .btn-imprimir {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,102,204,0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .btn-imprimir:hover {
+            background: #0052a3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,102,204,0.4);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #842029;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        /* MEDIA QUERY PARA IMPRESIÓN */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .factura-container {
+                box-shadow: none;
+                padding: 20px;
+                max-width: 100%;
+            }
+
+            .btn-imprimir {
+                display: none !important;
+            }
+
+            .info-section {
+                page-break-inside: avoid;
+            }
+
+            table {
+                page-break-inside: auto;
+            }
+
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+
+            thead {
+                display: table-header-group;
+            }
+
+            .totales-box {
+                page-break-inside: avoid;
+            }
+
+            @page {
+                margin: 1.5cm;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+
+            .factura-container {
+                padding: 20px;
+            }
+
+            .info-section {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+
+            .btn-imprimir {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 24px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading" class="loading">
+        <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #0066cc;"></i>
+        <p>Generando factura...</p>
+    </div>
+
+    <div id="factura-content" class="factura-container" style="display: none;">
+        <!-- Contenido se generará dinámicamente -->
+    </div>
+
+    <button class="btn-imprimir" onclick="window.print()" id="btn-imprimir" style="display: none;">
+        <i class="fas fa-print"></i> Imprimir / Guardar PDF
+    </button>
+
+    <script>
+        // REQUISITO: JAVASCRIPT PARA GENERACIÓN DINÁMICA (4 PTS) - GENERACIÓN DINÁMICA DE FACTURA
+
+        const API_BASE = window.location.origin + '/Proyecto_DesarrolloWeb/php/api/';
+
+        async function cargarFactura() {
+            try {
+                // Obtener ID del pedido de la URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const pedidoId = urlParams.get('pedido_id');
+
+                if (!pedidoId) {
+                    mostrarError('No se especificó un número de pedido');
+                    return;
+                }
+
+                // Obtener datos del pedido
+                const response = await fetch(`${API_BASE}pedidos.php?action=detalle&id=${pedidoId}`);
+                const result = await response.json();
+
+                if (!result.success) {
+                    mostrarError(result.message || 'Error al cargar la factura');
+                    return;
+                }
+
+                generarFactura(result.data);
+
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarError('Error al cargar la factura. Intente nuevamente.');
+            }
+        }
+
+        function generarFactura(pedido) {
+            const container = document.getElementById('factura-content');
+
+            // Calcular datos
+            const numeroFactura = String(pedido.id).padStart(6, '0');
+            const fecha = new Date(pedido.created_at);
+            const fechaFormato = fecha.toLocaleDateString('es-MX', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            const horaFormato = fecha.toLocaleTimeString('es-MX', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            // Generar filas de productos
+            let productosHTML = '';
+            pedido.detalles.forEach(item => {
+                productosHTML += `
+                    <tr>
+                        <td class="text-center">${item.cantidad}</td>
+                        <td>${item.producto_nombre}</td>
+                        <td class="text-right">$${parseFloat(item.producto_precio).toFixed(2)}</td>
+                        <td class="text-right">$${parseFloat(item.subtotal).toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+
+            // Generar HTML completo
+            container.innerHTML = `
+                <div class="header">
+                    <div class="logo-icon">🛠️</div>
+                    <h1>FERRETERÍA EL CONSTRUCTOR</h1>
+                    <p>Calle 50 #123, Centro, Mérida, Yucatán</p>
+                    <p>Tel: (999) 123-4567 | Email: ventas@ferreteria.com</p>
+                    <p>RFC: FEC123456ABC</p>
+                </div>
+
+                <div class="factura-titulo">
+                    <h2>FACTURA #${numeroFactura}</h2>
+                    <p>Fecha: ${fechaFormato} - ${horaFormato}</p>
+                    <span class="estado-badge estado-${pedido.estado}">
+                        ${pedido.estado.toUpperCase()}
+                    </span>
+                </div>
+
+                <div class="info-section">
+                    <div class="info-box">
+                        <h3><i class="fas fa-user"></i> DATOS DEL CLIENTE</h3>
+                        <p><strong>Nombre:</strong> ${pedido.usuario_nombre || 'N/A'}</p>
+                        <p><strong>Email:</strong> ${pedido.email || 'N/A'}</p>
+                        <p><strong>Teléfono:</strong> ${pedido.telefono || 'N/A'}</p>
+                        ${pedido.direccion ? `<p><strong>Dirección:</strong> ${pedido.direccion}</p>` : ''}
+                    </div>
+
+                    <div class="info-box">
+                        <h3><i class="fas fa-file-invoice"></i> INFORMACIÓN DEL PEDIDO</h3>
+                        <p><strong>No. Pedido:</strong> ${numeroFactura}</p>
+                        <p><strong>Fecha:</strong> ${fechaFormato}</p>
+                        <p><strong>Hora:</strong> ${horaFormato}</p>
+                        <p><strong>Tipo de Envío:</strong> ${pedido.tipo_envio === 'domicilio' ? 'Envío a Domicilio' : 'Recoger en Tienda'}</p>
+                        ${pedido.notas ? `<p><strong>Notas:</strong> ${pedido.notas}</p>` : ''}
+                    </div>
+                </div>
+
+                <h3 style="color: #0066cc; margin-top: 30px;">
+                    <i class="fas fa-shopping-cart"></i> DETALLE DE PRODUCTOS
+                </h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="width: 10%;">Cant.</th>
+                            <th style="width: 50%;">Producto</th>
+                            <th class="text-right" style="width: 20%;">Precio Unit.</th>
+                            <th class="text-right" style="width: 20%;">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${productosHTML}
+                    </tbody>
+                </table>
+
+                <div class="totales">
+                    <div class="totales-box">
+                        <div class="totales-row">
+                            <strong>Subtotal:</strong>
+                            <span>$${parseFloat(pedido.subtotal).toFixed(2)}</span>
+                        </div>
+                        <div class="totales-row">
+                            <strong>IVA (16%):</strong>
+                            <span>$${parseFloat(pedido.iva).toFixed(2)}</span>
+                        </div>
+                        ${parseFloat(pedido.costo_envio) > 0 ? `
+                            <div class="totales-row">
+                                <strong>Costo de Envío:</strong>
+                                <span>$${parseFloat(pedido.costo_envio).toFixed(2)}</span>
+                            </div>
+                        ` : ''}
+                        <div class="totales-row total-final">
+                            <strong>TOTAL:</strong>
+                            <strong>$${parseFloat(pedido.total).toFixed(2)}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer">
+                    <h3 style="color: #0066cc; margin-bottom: 15px;">¡Gracias por su compra!</h3>
+                    <p><strong>Esta es una factura simplificada.</strong></p>
+                    <p>Para factura fiscal con RFC, contacte a: <strong>ventas@ferreteria.com</strong></p>
+                    <p style="margin-top: 20px;">Horario de atención: <strong>Lun-Sáb 8:00 AM - 7:00 PM</strong></p>
+                    <p style="margin-top: 30px; font-size: 0.85rem; color: #999;">
+                        Documento generado el ${new Date().toLocaleDateString('es-MX')} a las ${new Date().toLocaleTimeString('es-MX')}
+                    </p>
+                </div>
+            `;
+
+            // Mostrar factura y ocultar loading
+            document.getElementById('loading').style.display = 'none';
+            container.style.display = 'block';
+            document.getElementById('btn-imprimir').style.display = 'block';
+
+            // Actualizar título de la página
+            document.title = `Factura #${numeroFactura} - Ferretería El Constructor`;
+        }
+
+        function mostrarError(mensaje) {
+            const container = document.getElementById('factura-content');
+            container.innerHTML = `
+                <div class="error">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                    <h2>Error al Generar Factura</h2>
+                    <p>${mensaje}</p>
+                    <button onclick="window.close()" style="margin-top: 20px; padding: 10px 30px; background: #0066cc; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        Cerrar
+                    </button>
+                </div>
+            `;
+            document.getElementById('loading').style.display = 'none';
+            container.style.display = 'block';
+        }
+
+        // Cargar factura al iniciar
+        window.addEventListener('DOMContentLoaded', cargarFactura);
+    </script>
+</body>
+</html>
