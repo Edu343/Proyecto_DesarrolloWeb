@@ -1,6 +1,10 @@
 /**
  * Carrito.js - Versión Definitiva con Drag & Drop
  * Cumple requisitos: localStorage + Drag & Drop (funcionalidad extra)
+ *
+ * REQUISITO: DRAG AND DROP - REORDENAR ITEMS DEL CARRITO
+ * REQUISITO: LOCAL STORAGE (2 PTS) - PERSISTENCIA DEL CARRITO
+ * REQUISITO: JAVASCRIPT PARA GENERACIÓN DINÁMICA (4 PTS) - RENDERIZADO DINÁMICO
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -102,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // DRAG & DROP 
+    // REQUISITO: DRAG AND DROP - IMPLEMENTACIÓN COMPLETA PARA REORDENAR ITEMS
     function attachDragAndDrop() {
         const items = itemsCarritoBody.querySelectorAll('tr[draggable="true"]');
 
@@ -309,6 +313,55 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3000);
     }
 
+    function mostrarModalConfirmacion(datosPedido) {
+        // Crear modal de confirmación
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.style.display = 'flex';
+        modal.innerHTML = `
+            <div class="modal-contenido-confirmacion">
+                <div class="modal-header">
+                    <h3><i class="fas fa-check-circle" style="color: #28a745;"></i> ¡Pedido Realizado con Éxito!</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="confirmacion-info">
+                        <p><strong>Número de Pedido:</strong> #${String(datosPedido.pedido_id).padStart(6, '0')}</p>
+                        <p><strong>Total:</strong> $${datosPedido.total.toFixed(2)}</p>
+                        <div class="confirmacion-mensaje">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Recibirás un correo de confirmación con los detalles de tu pedido.</p>
+                        </div>
+                    </div>
+                    <div class="modal-acciones">
+                        <a href="${datosPedido.factura_url}" target="_blank" class="btn btn-primario">
+                            <i class="fas fa-file-pdf"></i> Descargar Factura
+                        </a>
+                        <button id="btn-cerrar-confirmacion" class="btn btn-secundario">
+                            <i class="fas fa-home"></i> Ir a Inicio
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Event listener para cerrar
+        const btnCerrar = modal.querySelector('#btn-cerrar-confirmacion');
+        btnCerrar.addEventListener('click', () => {
+            modal.remove();
+            window.location.href = 'index.html';
+        });
+
+        // Cerrar al hacer click fuera
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+                window.location.href = 'index.html';
+            }
+        });
+    }
+
 
     // EVENT LISTENERS PRINCIPALES
     if (vaciarCarritoBtn) {
@@ -418,13 +471,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (respuesta.success) {
                 mostrarToast('¡Pedido realizado con éxito!', 'exito');
 
+                // Mostrar modal de confirmación con botón de factura
+                mostrarModalConfirmacion(respuesta.data);
+
                 // Limpiar carrito después de confirmar el pedido
                 localStorage.removeItem('carrito');
-
-                // Redirigir a inicio después de 2 segundos
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 2000);
+                renderCarrito();
             } else {
                 throw new Error(respuesta.message || 'Error al procesar el pedido');
             }

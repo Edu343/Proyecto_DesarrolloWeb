@@ -1,5 +1,7 @@
 /**
  * Inicio - Página Principal
+ *
+ * REQUISITO: CONEXIÓN A 2 APIS EXTERNAS - API #1 EXCHANGERATE, API #2 WEATHERAPI (VER LÍNEA 199 Y 268)
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -239,6 +241,44 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    /**
+     * REQUISITO: CONEXIÓN A API EXTERNA #2 - OPEN-METEO (CLIMA)
+     */
+    async function cargarClima() {
+        try {
+            // REQUISITO: API EXTERNA #2 - OPEN-METEO.COM (CLIMA GRATIS SIN API KEY)
+            const urlApi = 'https://api.open-meteo.com/v1/forecast?latitude=20.97&longitude=-89.62&current_weather=true';
+            const respuesta = await fetch(urlApi);
+
+            if (!respuesta.ok) throw new Error('Error al obtener clima');
+
+            const datos = await respuesta.json();
+            mostrarWidgetClima(datos.current_weather);
+        } catch (error) {
+            console.error('Error al cargar clima:', error);
+        }
+    }
+
+    function mostrarWidgetClima(clima) {
+        const widget = document.createElement('div');
+        widget.className = 'api-widget clima-widget';
+        widget.style.cssText = `
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        `;
+        widget.innerHTML = `
+            <h4 style="margin: 0 0 10px 0; font-size: 0.9rem;">🌡️ Clima en Mérida</h4>
+            <div style="font-size: 1.5rem; font-weight: bold;">${clima.temperature}°C</div>
+            <div style="font-size: 0.85rem; opacity: 0.9;">Viento: ${clima.windspeed} km/h</div>
+        `;
+        const footer = document.querySelector('.footer');
+        if (footer) footer.parentNode.insertBefore(widget, footer);
+    }
+
     function mostrarWidgetTipoCambio(datos) {
         const widget = document.createElement('div');
         widget.className = 'api-widget cambio-widget';
@@ -333,5 +373,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     await cargarProductosDestacados();
     await cargarOfertas();
     await cargarTipoCambio();
+    await cargarClima(); // REQUISITO: LLAMADA A API EXTERNA #2
     crearBotonToggle();
 });

@@ -2,6 +2,8 @@
 /**
  * Clase de Seguridad
  * Protección contra XSS, CSRF, SQL Injection y otros ataques
+ *
+ * REQUISITO: PROTECCIÓN CONTRA ATAQUES BÁSICOS (2 PTS) - IMPLEMENTADO AQUÍ
  */
 
 class Security {

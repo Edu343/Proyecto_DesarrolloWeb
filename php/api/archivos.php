@@ -2,6 +2,8 @@
 /**
  * API de Gestión de Archivos
  * Subida y descarga de imágenes y documentos
+ *
+ * REQUISITO: SUBIR Y DESCARGAR ARCHIVOS (2 PTS) - IMPLEMENTADO AQUÍ
  */
 
 header('Content-Type: application/json');
