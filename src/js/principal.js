@@ -127,15 +127,23 @@ const Auth = {
         try {
             const response = await Ajax.get(API_BASE + 'auth.php', { action: 'check' });
             if (response.logged_in && response.user) {
-                this.updateUI(response.user);
+                // Si la sesión está activa, actualizar el localStorage y la UI
+                Storage.set('user', response.user);
+                initUserMenu(response.user);
+            } else {
+                 // Si la sesión no está activa, asegurarse de que el localStorage esté limpio y la UI se actualice
+                Storage.remove('user');
+                initUserMenu(null);
             }
         } catch (error) {
             console.error('Error al verificar sesión:', error);
+            // En caso de error de red, confiar en el estado del localStorage
+            initUserMenu(Storage.get('user'));
         }
     },
 
     updateUI(user) {
-        // Actualizar UI según usuario autenticado
+        // Esta función ahora solo es un placeholder ya que la lógica principal está en initUserMenu
         const userInfo = document.getElementById('user-info');
         if (userInfo) {
             userInfo.innerHTML = `Hola, ${user.nombre}`;
@@ -300,12 +308,75 @@ const Validacion = {
 };
 
 
+// GESTIÓN DEL MENÚ DE USUARIO
+function initUserMenu(userFromCheck) {
+    const userMenu = document.getElementById('user-menu');
+    const navUserNombre = document.getElementById('nav-user-nombre');
+    const btnLogout = document.getElementById('btn-logout');
+    const btnNavLogin = document.getElementById('btn-nav-login');
+    
+    // Priorizar el usuario devuelto por la verificación de sesión, si no, usar localStorage
+    const user = userFromCheck || Storage.get('user');
+
+    if (!userMenu || !navUserNombre || !btnLogout) {
+        return; 
+    }
+    
+    // Limpiar manejadores de eventos anteriores para evitar duplicados
+    const newBtnLogout = btnLogout.cloneNode(true);
+    btnLogout.parentNode.replaceChild(newBtnLogout, btnLogout);
+
+    if (user && user.id) {
+        // Mostrar menú de usuario
+        navUserNombre.textContent = user.nombre;
+        userMenu.style.display = 'flex';
+        if (btnNavLogin) {
+            btnNavLogin.style.display = 'none';
+        }
+
+        // Adjuntar evento de logout
+        newBtnLogout.addEventListener('click', handleNavLogout);
+    } else {
+        // Mostrar botón de Login/Registro
+        userMenu.style.display = 'none';
+        if (btnNavLogin) {
+            btnNavLogin.style.display = 'flex';
+        }
+    }
+}
+
+function handleNavLogout() {
+    if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+        // Llamar a la API para cerrar sesión en el backend
+        Ajax.get(API_BASE + 'auth.php', { action: 'logout' })
+            .then(response => {
+                if (response.success) {
+                    Storage.remove('user');
+                    window.mostrarToast('Sesión cerrada correctamente', 'exito');
+
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
+                } else {
+                    // Si falla el API, limpiar de todas formas el localStorage
+                    Storage.remove('user');
+                    window.mostrarToast('Error al cerrar sesión en el servidor. Intente de nuevo.', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Logout error:', error);
+                Storage.remove('user');
+                window.mostrarToast('Error de red al cerrar sesión', 'error');
+            });
+    }
+}
+
 // INICIALIZACIÓN
 document.addEventListener('DOMContentLoaded', async () => {
     // Inicializar sistemas
+    // initUserMenu ya no se llama aquí, sino dentro de Auth.checkSession()
     await Auth.init();
     Carrito.init();
-    initUserMenu();
 
     // Menú Hamburguesa
     const menuHamburguesa = document.getElementById('menu-hamburguesa');
@@ -326,38 +397,3 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.Validacion = Validacion;
     window.actualizarContadorCarrito = () => Carrito.actualizarContador();
 });
-
-
-// GESTIÓN DEL MENÚ DE USUARIO
-function initUserMenu() {
-    const userMenu = document.getElementById('user-menu');
-    const navUserNombre = document.getElementById('nav-user-nombre');
-    const btnLogout = document.getElementById('btn-logout');
-
-    if (!userMenu || !navUserNombre || !btnLogout) {
-        return; 
-    }
-
-    // Verificar si hay usuario logueado
-    const user = Storage.get('user');
-    if (user && user.id) {
-        // Mostrar menú de usuario
-        navUserNombre.textContent = user.nombre;
-        userMenu.style.display = 'flex';
-
-        // Adjuntar evento de logout
-        btnLogout.addEventListener('click', handleNavLogout);
-    }
-}
-
-function handleNavLogout() {
-    if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-        Storage.remove('user');
-
-        window.mostrarToast('Sesión cerrada correctamente', 'exito');
-
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 1000);
-    }
-}

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-12-2025 a las 00:03:56
+-- Tiempo de generación: 06-12-2025 a las 02:40:31
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `ferreteria_db`
 --
+CREATE DATABASE IF NOT EXISTS `ferreteria_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `ferreteria_db`;
 
 -- --------------------------------------------------------
 
@@ -27,6 +29,7 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `archivos`
 --
 
+DROP TABLE IF EXISTS `archivos`;
 CREATE TABLE `archivos` (
   `id` int(11) NOT NULL,
   `nombre_original` varchar(255) NOT NULL,
@@ -45,6 +48,7 @@ CREATE TABLE `archivos` (
 -- Estructura de tabla para la tabla `auditoria_log`
 --
 
+DROP TABLE IF EXISTS `auditoria_log`;
 CREATE TABLE `auditoria_log` (
   `id` int(11) NOT NULL,
   `tabla` varchar(50) NOT NULL,
@@ -147,6 +151,7 @@ INSERT INTO `auditoria_log` (`id`, `tabla`, `accion`, `registro_id`, `usuario_id
 -- Estructura de tabla para la tabla `categorias`
 --
 
+DROP TABLE IF EXISTS `categorias`;
 CREATE TABLE `categorias` (
   `id` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL,
@@ -194,6 +199,7 @@ INSERT INTO `categorias` (`id`, `nombre`, `descripcion`, `icono`, `activo`, `cre
 -- Estructura de tabla para la tabla `pedidos`
 --
 
+DROP TABLE IF EXISTS `pedidos`;
 CREATE TABLE `pedidos` (
   `id` int(11) NOT NULL,
   `usuario_id` int(11) NOT NULL,
@@ -214,6 +220,7 @@ CREATE TABLE `pedidos` (
 -- Estructura de tabla para la tabla `pedido_detalles`
 --
 
+DROP TABLE IF EXISTS `pedido_detalles`;
 CREATE TABLE `pedido_detalles` (
   `id` int(11) NOT NULL,
   `pedido_id` int(11) NOT NULL,
@@ -228,6 +235,7 @@ CREATE TABLE `pedido_detalles` (
 -- Disparadores `pedido_detalles`
 -- REQUISITO: USO DE TRIGGERS (2 PTS) - VALIDACIÓN AUTOMÁTICA DE STOCK
 --
+DROP TRIGGER IF EXISTS `trg_pedido_detalle_validar_stock`;
 DELIMITER $$
 CREATE TRIGGER `trg_pedido_detalle_validar_stock` BEFORE INSERT ON `pedido_detalles` FOR EACH ROW BEGIN
     DECLARE stock_disponible INT;
@@ -255,6 +263,7 @@ DELIMITER ;
 -- Estructura de tabla para la tabla `productos`
 --
 
+DROP TABLE IF EXISTS `productos`;
 CREATE TABLE `productos` (
   `id` int(11) NOT NULL,
   `nombre` varchar(200) NOT NULL,
@@ -315,6 +324,7 @@ INSERT INTO `productos` (`id`, `nombre`, `descripcion`, `precio`, `stock`, `cate
 -- Disparadores `productos`
 -- REQUISITO: USO DE TRIGGERS (2 PTS) - AUDITORÍA AUTOMÁTICA DE CAMBIOS
 --
+DROP TRIGGER IF EXISTS `trg_productos_audit_delete`;
 DELIMITER $$
 CREATE TRIGGER `trg_productos_audit_delete` AFTER DELETE ON `productos` FOR EACH ROW BEGIN
     INSERT INTO auditoria_log (tabla, accion, registro_id, datos_anteriores)
@@ -331,6 +341,7 @@ CREATE TRIGGER `trg_productos_audit_delete` AFTER DELETE ON `productos` FOR EACH
 END
 $$
 DELIMITER ;
+DROP TRIGGER IF EXISTS `trg_productos_audit_insert`;
 DELIMITER $$
 CREATE TRIGGER `trg_productos_audit_insert` AFTER INSERT ON `productos` FOR EACH ROW BEGIN
     INSERT INTO auditoria_log (tabla, accion, registro_id, datos_nuevos)
@@ -348,6 +359,7 @@ CREATE TRIGGER `trg_productos_audit_insert` AFTER INSERT ON `productos` FOR EACH
 END
 $$
 DELIMITER ;
+DROP TRIGGER IF EXISTS `trg_productos_audit_update`;
 DELIMITER $$
 CREATE TRIGGER `trg_productos_audit_update` AFTER UPDATE ON `productos` FOR EACH ROW BEGIN
     INSERT INTO auditoria_log (tabla, accion, registro_id, datos_anteriores, datos_nuevos)
@@ -376,6 +388,7 @@ DELIMITER ;
 -- Estructura de tabla para la tabla `sesiones`
 --
 
+DROP TABLE IF EXISTS `sesiones`;
 CREATE TABLE `sesiones` (
   `id` varchar(128) NOT NULL,
   `usuario_id` int(11) NOT NULL,
@@ -387,6 +400,7 @@ CREATE TABLE `sesiones` (
 --
 -- Disparadores `sesiones`
 --
+DROP TRIGGER IF EXISTS `trg_sesiones_update_usuario`;
 DELIMITER $$
 CREATE TRIGGER `trg_sesiones_update_usuario` AFTER INSERT ON `sesiones` FOR EACH ROW BEGIN
     UPDATE usuarios
@@ -402,6 +416,7 @@ DELIMITER ;
 -- Estructura de tabla para la tabla `usuarios`
 --
 
+DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE `usuarios` (
   `id` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL,
@@ -430,6 +445,7 @@ INSERT INTO `usuarios` (`id`, `nombre`, `email`, `password_hash`, `telefono`, `d
 -- Estructura Stand-in para la vista `vista_estadisticas_categoria`
 -- (Véase abajo para la vista actual)
 --
+DROP VIEW IF EXISTS `vista_estadisticas_categoria`;
 CREATE TABLE `vista_estadisticas_categoria` (
 `categoria_id` int(11)
 ,`categoria_nombre` varchar(100)
@@ -447,6 +463,7 @@ CREATE TABLE `vista_estadisticas_categoria` (
 -- Estructura Stand-in para la vista `vista_pedidos_completo`
 -- (Véase abajo para la vista actual)
 --
+DROP VIEW IF EXISTS `vista_pedidos_completo`;
 CREATE TABLE `vista_pedidos_completo` (
 `pedido_id` int(11)
 ,`total` decimal(10,2)
@@ -466,6 +483,7 @@ CREATE TABLE `vista_pedidos_completo` (
 -- Estructura Stand-in para la vista `vista_productos_completo`
 -- (Véase abajo para la vista actual)
 --
+DROP VIEW IF EXISTS `vista_productos_completo`;
 CREATE TABLE `vista_productos_completo` (
 `id` int(11)
 ,`nombre` varchar(200)
@@ -489,6 +507,7 @@ CREATE TABLE `vista_productos_completo` (
 --
 DROP TABLE IF EXISTS `vista_estadisticas_categoria`;
 
+DROP VIEW IF EXISTS `vista_estadisticas_categoria`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_estadisticas_categoria`  AS SELECT `c`.`id` AS `categoria_id`, `c`.`nombre` AS `categoria_nombre`, `c`.`icono` AS `categoria_icono`, count(`p`.`id`) AS `total_productos`, sum(`p`.`stock`) AS `stock_total`, avg(`p`.`precio`) AS `precio_promedio`, min(`p`.`precio`) AS `precio_minimo`, max(`p`.`precio`) AS `precio_maximo` FROM (`categorias` `c` left join `productos` `p` on(`c`.`id` = `p`.`categoria_id` and `p`.`activo` = 1)) WHERE `c`.`activo` = 1 GROUP BY `c`.`id`, `c`.`nombre`, `c`.`icono` ;
 
 -- --------------------------------------------------------
@@ -498,6 +517,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vista_pedidos_completo`;
 
+DROP VIEW IF EXISTS `vista_pedidos_completo`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_pedidos_completo`  AS SELECT `ped`.`id` AS `pedido_id`, `ped`.`total` AS `total`, `ped`.`estado` AS `estado`, `ped`.`tipo_envio` AS `tipo_envio`, `ped`.`created_at` AS `fecha_pedido`, `u`.`id` AS `usuario_id`, `u`.`nombre` AS `usuario_nombre`, `u`.`email` AS `usuario_email`, `u`.`telefono` AS `usuario_telefono`, count(`pd`.`id`) AS `total_items` FROM ((`pedidos` `ped` join `usuarios` `u` on(`ped`.`usuario_id` = `u`.`id`)) left join `pedido_detalles` `pd` on(`ped`.`id` = `pd`.`pedido_id`)) GROUP BY `ped`.`id`, `ped`.`total`, `ped`.`estado`, `ped`.`tipo_envio`, `ped`.`created_at`, `u`.`id`, `u`.`nombre`, `u`.`email`, `u`.`telefono` ;
 
 -- --------------------------------------------------------
@@ -507,6 +527,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vista_productos_completo`;
 
+DROP VIEW IF EXISTS `vista_productos_completo`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_productos_completo`  AS SELECT `p`.`id` AS `id`, `p`.`nombre` AS `nombre`, `p`.`descripcion` AS `descripcion`, `p`.`precio` AS `precio`, `p`.`stock` AS `stock`, `p`.`imagen` AS `imagen`, `p`.`destacado` AS `destacado`, `p`.`activo` AS `activo`, `p`.`created_at` AS `created_at`, `c`.`id` AS `categoria_id`, `c`.`nombre` AS `categoria_nombre`, `c`.`icono` AS `categoria_icono` FROM (`productos` `p` join `categorias` `c` on(`p`.`categoria_id` = `c`.`id`)) WHERE `p`.`activo` = 1 ;
 
 --
@@ -625,7 +646,7 @@ ALTER TABLE `contactos`
 -- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `pedido_detalles`
