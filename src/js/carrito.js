@@ -392,45 +392,46 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    async function finalizarPedido(user) {
+    async function finalizarPedido(usuario) {
         const carrito = obtenerCarrito();
-        const subtotal = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+        const subtotal = carrito.reduce((suma, item) => suma + (item.precio * item.cantidad), 0);
         const costoEnvio = parseFloat(tipoEnvioSelect.value);
         const iva = subtotal * IVA_RATE;
         const total = subtotal + iva + costoEnvio;
 
-        const pedidoData = {
-            usuario_id: user.id,
+        // Determinar tipo de envío según el valor seleccionado
+        const tipoEnvio = costoEnvio > 0 ? 'domicilio' : 'tienda';
+
+        const datosPedido = {
             items: carrito,
-            subtotal: subtotal,
-            iva: iva,
-            envio: costoEnvio,
-            total: total,
-            tipo_envio: tipoEnvioSelect.options[tipoEnvioSelect.selectedIndex].text
+            tipo_envio: tipoEnvio,
+            notas: '' // Campo opcional para notas del cliente
         };
 
         try {
             btnFinalizarPedido.disabled = true;
             btnFinalizarPedido.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
 
-            // const response = await Ajax.post('/Proyecto_DesarrolloWeb/php/api/pedidos.php', pedidoData);
+            // Llamar a la API real de pedidos
+            const respuesta = await Ajax.post('/Proyecto_DesarrolloWeb/php/api/pedidos.php?action=crear', datosPedido);
 
-            // Por ahora simulamos éxito
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            if (respuesta.success) {
+                mostrarToast('¡Pedido realizado con éxito!', 'exito');
 
-            mostrarToast('¡Pedido realizado con éxito!', 'exito');
+                // Limpiar carrito después de confirmar el pedido
+                localStorage.removeItem('carrito');
 
-            // Limpiar carrito
-            localStorage.removeItem('carrito');
-
-            // Redirigir después de 2 segundos
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 2000);
+                // Redirigir a inicio después de 2 segundos
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            } else {
+                throw new Error(respuesta.message || 'Error al procesar el pedido');
+            }
 
         } catch (error) {
             console.error('Error al finalizar pedido:', error);
-            mostrarToast('Error al procesar el pedido', 'error');
+            mostrarToast(error.message || 'Error al procesar el pedido. Intente nuevamente.', 'error');
             btnFinalizarPedido.disabled = false;
             btnFinalizarPedido.innerHTML = '<i class="fas fa-check-circle"></i> Finalizar Pedido';
         }

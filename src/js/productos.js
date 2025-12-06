@@ -176,6 +176,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         data-nombre="${producto.nombre}"
                         data-precio="${producto.precio}"
                         data-stock="${producto.stock}"
+                        data-imagen="${producto.imagen || ''}"
                         ${!disponible ? 'disabled' : ''}>
                         <i class="fas fa-cart-plus"></i>
                         ${disponible ? 'Agregar al Carrito' : 'No disponible'}
@@ -228,6 +229,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     nombre: btn.dataset.nombre,
                     precio: parseFloat(btn.dataset.precio),
                     stock: parseInt(btn.dataset.stock),
+                    imagen: btn.dataset.imagen || null, // Incluir imagen del producto
                     cantidad: 1
                 };
                 agregarAlCarrito(producto);
@@ -250,12 +252,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
                 existente.cantidad++;
             } else {
-                // Agregar nuevo producto
+                // Agregar nuevo producto con imagen incluida
                 carrito.push({
                     id: producto.id,
                     nombre: producto.nombre,
                     precio: producto.precio,
                     stock: producto.stock,
+                    imagen: producto.imagen, // Guardar imagen para mostrar en el carrito
                     cantidad: producto.cantidad
                 });
             }
