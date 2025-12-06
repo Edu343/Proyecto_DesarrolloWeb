@@ -56,7 +56,7 @@ if ($method === 'POST' && $action === 'crear') {
             sendResponse(false, null, 'Debe iniciar sesión para crear un pedido', 401);
         }
 
-        $usuarioId = $sessionManager->getUserId();
+        $usuarioId = $sessionManager->obtenerIdUsuario();
         $input = json_decode(file_get_contents('php://input'), true);
 
         $items = $input['items'] ?? [];
@@ -209,7 +209,7 @@ elseif ($method === 'GET' && $action === 'mis_pedidos') {
             sendResponse(false, null, 'Debe iniciar sesión', 401);
         }
 
-        $usuarioId = $sessionManager->getUserId();
+        $usuarioId = $sessionManager->obtenerIdUsuario();
 
         $stmt = $pdo->prepare("
             SELECT * FROM vista_pedidos_completo
@@ -238,7 +238,7 @@ elseif ($method === 'GET' && $action === 'detalle') {
         }
 
         $pedidoId = (int)($_GET['id'] ?? 0);
-        $usuarioId = $sessionManager->getUserId();
+        $usuarioId = $sessionManager->obtenerIdUsuario();
 
         if ($pedidoId <= 0) {
             sendResponse(false, null, 'ID de pedido inválido', 400);

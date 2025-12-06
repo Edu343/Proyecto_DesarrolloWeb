@@ -105,9 +105,7 @@
         margin: 5px 0;
     }
 
-    /* ========================================
-       CARRITO DE COMPRAS
-       ======================================== */
+    /* CARRITO DE COMPRAS*/
 
     .contenedor-carrito {
         display: block !important;
@@ -233,9 +231,7 @@
         page-break-inside: avoid;
     }
 
-    /* ========================================
-       FORMULARIOS (para facturas/pedidos)
-       ======================================== */
+    /*FORMULARIOS (para facturas/pedidos)*/
 
     .form-contacto,
     .form-pedido {

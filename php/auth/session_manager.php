@@ -206,6 +206,16 @@ class SessionManager {
     }
 
     /**
+     * Obtener ID del usuario actual
+     */
+    public function obtenerIdUsuario() {
+        if (!$this->isLoggedIn()) {
+            return null;
+        }
+        return $_SESSION['user_id'] ?? null;
+    }
+
+    /**
      * Obtener datos del usuario actual
      */
     public function getCurrentUser() {
