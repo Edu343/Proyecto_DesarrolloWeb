@@ -67,10 +67,7 @@
         margin-bottom: 10px;
     }
 
-    /* ========================================
-       PRODUCTOS
-       ======================================== */
-
+    /*PRODUCTOS */
     .productos-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr) !important;
@@ -180,9 +177,7 @@
         margin-top: 10px;
     }
 
-    /* ========================================
-       INFORMACIÓN ADICIONAL
-       ======================================== */
+    /* INFORMACIÓN ADICIONAL */
 
     /* Agregar información de contacto al final */
     .footer::after {
@@ -204,9 +199,7 @@
         color: #666 !important;
     }
 
-    /* ========================================
-       UTILIDADES DE IMPRESIÓN
-       ======================================== */
+    /*UTILIDADES DE IMPRESIÓN*/
 
     /* Evitar quiebres de página */
     .no-break {
@@ -259,9 +252,7 @@
         border-right: none !important;
     }
 
-    /* ========================================
-       QR CODE (si se implementa)
-       ======================================== */
+    /*  QR CODE (si se implementa)*/
 
     .qr-code {
         page-break-inside: avoid;
@@ -269,9 +260,7 @@
         margin: 20px 0;
     }
 
-    /* ========================================
-       CABECERA Y PIE DE PÁGINA
-       ======================================== */
+    /* CABECERA Y PIE DE PÁGINA*/
 
     @page {
         @top-center {
@@ -284,9 +273,7 @@
     }
 }
 
-/* ========================================
-   LANDSCAPE (para tablas anchas)
-   ======================================== */
+/* LANDSCAPE (para tablas anchas)*/
 
 @media print and (orientation: landscape) {
     @page {
