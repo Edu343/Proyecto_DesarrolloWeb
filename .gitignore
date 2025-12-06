@@ -1,0 +1,26 @@
+# Claude Code local configuration
+.claude/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Temporary files
+nul
+
+# Uploads - archivos subidos por usuarios
+uploads/productos/*
+uploads/contacto/*
+!uploads/productos/.gitkeep
+!uploads/contacto/.gitkeep
+
+# Logs
+*.log
+php/logs/*
+
+# Cache
+*.cache
